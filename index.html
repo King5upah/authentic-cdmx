@@ -147,9 +147,15 @@
   .pack { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 30px 26px; display: flex; flex-direction: column; }
   .pack.feat { border: 2px solid var(--rosa); box-shadow: var(--shadow); position: relative; }
   .pack.feat::before {
-    content: "最受欢迎 · Popular"; position: absolute; top: -13px; left: 26px; background: var(--rosa);
+    content: "名额紧张 · Low availability"; position: absolute; top: -13px; left: 26px; background: var(--amarillo);
+    color: #1B1013; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 100px; letter-spacing: .05em;
+  }
+  .pack.sold { opacity: .62; position: relative; }
+  .pack.sold::before {
+    content: "已订满 · SOLD OUT"; position: absolute; top: -13px; left: 26px; background: var(--ink-soft);
     color: #fff; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 100px; letter-spacing: .05em;
   }
+  .pack .btn.disabled { background: transparent; border-color: var(--line); color: var(--ink-soft); cursor: not-allowed; pointer-events: none; }
   .pack h3 { margin: 0; font-size: 26px; }
   .pack .price { font-family: var(--serif); font-size: 44px; font-weight: 700; margin: 10px 0 2px; }
   .pack .price small { font-size: 16px; color: var(--ink-soft); font-weight: 400; }
@@ -159,6 +165,25 @@
   .pack li::before { content: "✳"; position: absolute; left: 0; color: var(--rosa); }
   .pack .btn { justify-content: center; margin-top: auto; border-color: var(--ink); color: var(--ink); }
   .pack.feat .btn { background: var(--rosa); border-color: var(--rosa); color: #fff; }
+
+  .planos-band { background: color-mix(in srgb, var(--verde) 7%, var(--ground)); }
+  .planos { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+  @media (max-width: 860px){ .planos { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px){ .planos { grid-template-columns: 1fr; } }
+  .plano { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; text-align: center; }
+  .plano .frame {
+    background: color-mix(in srgb, var(--ink) 5%, var(--card)); border-radius: 12px; padding: 10px; margin-bottom: 14px;
+  }
+  .plano svg { width: 100%; height: auto; display: block; }
+  .plano .num { font-family: var(--serif); font-size: 14px; font-weight: 700; color: var(--rosa); letter-spacing: .1em; }
+  .plano h4 { margin: 6px 0 2px; font-family: var(--serif); font-size: 21px; }
+  .plano .es { color: var(--verde); font-weight: 700; font-size: 12px; letter-spacing: .04em; display: block; margin-bottom: 8px; }
+  .plano p { margin: 0; font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .sil { fill: var(--rosa); }
+  .scene { fill: color-mix(in srgb, var(--ink) 16%, transparent); }
+  .bracket { fill: none; stroke: var(--ink); stroke-width: 2.4; opacity: .5; }
+  .confetti { fill: var(--amarillo); }
+  .confetti.v { fill: var(--verde); }
 
   .contact { text-align: center; }
   .qr { width: 244px; margin: 26px auto 18px; border-radius: 18px; background: #fff; border: 2px solid var(--rosa); padding: 12px; overflow: hidden; }
@@ -181,6 +206,7 @@
     <a href="#comida">吃什么</a>
     <a href="#mitos">谣言粉碎</a>
     <a href="#foto">约拍</a>
+    <a href="#planos">景别</a>
     <a href="#contacto">联系</a>
   </nav>
 </div>
@@ -337,12 +363,115 @@
         <div class="price">$220<small>/4小时</small><span class="usd">≈ 1300 元</span></div>
         <ul><li>2–3 个地点，含隐藏机位</li><li>精修 60 张</li><li>向导 + 摄影 + 路线规划</li><li>协助打车、点餐</li><li>2 天内交付</li></ul>
         <a href="#contacto" class="btn">立即预约 →</a></div>
-      <div class="pack"><h3>Full Day</h3>
+      <div class="pack sold"><h3>Full Day</h3>
         <div class="price">$320<small>/整天</small><span class="usd">≈ 1900 元</span></div>
         <ul><li>全天旅拍（含金字塔可选）</li><li>精修 100 张</li><li>用车协调</li><li>日出 / 天台机位</li></ul>
-        <a href="#contacto" class="btn">预约</a></div>
+        <span class="btn disabled" aria-disabled="true">已订满 Sold out</span></div>
     </div>
     <p class="note">💵 价格为示意，请换成你真实报价。付款方式建议写清楚（现金 / 转账 / 刷卡）。</p>
+  </div>
+</section>
+
+<section id="planos" class="planos-band">
+  <div class="wrap">
+    <p class="eyebrow">Tipo de plano · 你想要什么景别</p>
+    <div class="shead">
+      <h2>预约前告诉我<br>你想要哪种照片</h2>
+      <span class="es-tag">Elige tu encuadre</span>
+    </div>
+    <p class="lede" style="margin:-24px 0 34px;">加微信时，说一句「我想要 1 号 / 2 号…」就行。不确定也没关系 —— 到现场我帮你决定，重点是玩得开心。</p>
+    <div class="planos">
+
+      <div class="plano">
+        <div class="frame">
+          <svg viewBox="0 0 160 200" role="img" aria-label="全身加背景 wide shot 示意图">
+            <rect class="scene" x="18" y="112" width="22" height="60" rx="2"/>
+            <rect class="scene" x="118" y="96" width="24" height="76" rx="2"/>
+            <rect class="scene" x="0" y="170" width="160" height="6"/>
+            <circle class="sil" cx="80" cy="72" r="8"/>
+            <rect class="sil" x="74" y="80" width="12" height="38" rx="5"/>
+            <rect class="sil" x="68" y="84" width="4" height="30" rx="2"/>
+            <rect class="sil" x="88" y="84" width="4" height="30" rx="2"/>
+            <rect class="sil" x="75" y="116" width="4" height="52" rx="2"/>
+            <rect class="sil" x="81" y="116" width="4" height="52" rx="2"/>
+            <path class="bracket" d="M6,22 L6,6 L22,6"/>
+            <path class="bracket" d="M138,6 L154,6 L154,22"/>
+            <path class="bracket" d="M6,178 L6,194 L22,194"/>
+            <path class="bracket" d="M138,194 L154,194 L154,178"/>
+          </svg>
+        </div>
+        <span class="num">01</span>
+        <h4>全身 + 背景</h4>
+        <span class="es">Plano general · Wide</span>
+        <p>人小、景大。适合地标、街道、天际线 —— 你和这座城市一起入镜。</p>
+      </div>
+
+      <div class="plano">
+        <div class="frame">
+          <svg viewBox="0 0 160 200" role="img" aria-label="七分身 american shot 示意图">
+            <circle class="sil" cx="80" cy="50" r="16"/>
+            <rect class="sil" x="60" y="66" width="40" height="60" rx="14"/>
+            <rect class="sil" x="48" y="70" width="11" height="52" rx="5"/>
+            <rect class="sil" x="101" y="70" width="11" height="52" rx="5"/>
+            <rect class="sil" x="63" y="120" width="14" height="80" rx="6"/>
+            <rect class="sil" x="83" y="120" width="14" height="80" rx="6"/>
+            <path class="bracket" d="M6,22 L6,6 L22,6"/>
+            <path class="bracket" d="M138,6 L154,6 L154,22"/>
+            <path class="bracket" d="M6,178 L6,194 L22,194"/>
+            <path class="bracket" d="M138,194 L154,194 L154,178"/>
+          </svg>
+        </div>
+        <span class="num">02</span>
+        <h4>七分身</h4>
+        <span class="es">Plano americano</span>
+        <p>大腿以上入镜。经典时尚感，既看得到你的穿搭，也带一点环境。</p>
+      </div>
+
+      <div class="plano">
+        <div class="frame">
+          <svg viewBox="0 0 160 200" role="img" aria-label="人像特写 portrait 示意图">
+            <rect class="sil" x="26" y="150" width="108" height="60" rx="34"/>
+            <circle class="sil" cx="80" cy="82" r="40"/>
+            <path class="bracket" d="M6,22 L6,6 L22,6"/>
+            <path class="bracket" d="M138,6 L154,6 L154,22"/>
+            <path class="bracket" d="M6,178 L6,194 L22,194"/>
+            <path class="bracket" d="M138,194 L154,194 L154,178"/>
+          </svg>
+        </div>
+        <span class="num">03</span>
+        <h4>人像特写</h4>
+        <span class="es">Retrato · Portrait</span>
+        <p>头肩为主，背景虚化。突出表情和情绪，最适合当头像、当封面。</p>
+      </div>
+
+      <div class="plano">
+        <div class="frame">
+          <svg viewBox="0 0 160 200" role="img" aria-label="随意抓拍 candid 示意图">
+            <circle class="confetti" cx="26" cy="34" r="4"/>
+            <circle class="confetti v" cx="140" cy="46" r="4"/>
+            <circle class="confetti" cx="132" cy="150" r="4"/>
+            <circle class="confetti v" cx="30" cy="140" r="4"/>
+            <g transform="rotate(-9 80 100)">
+              <circle class="sil" cx="80" cy="60" r="14"/>
+              <rect class="sil" x="67" y="74" width="26" height="46" rx="11"/>
+              <rect class="sil" x="46" y="48" width="9" height="34" rx="4" transform="rotate(-38 50 65)"/>
+              <rect class="sil" x="105" y="48" width="9" height="34" rx="4" transform="rotate(38 110 65)"/>
+              <rect class="sil" x="66" y="116" width="10" height="46" rx="5" transform="rotate(14 71 139)"/>
+              <rect class="sil" x="84" y="116" width="10" height="46" rx="5" transform="rotate(-14 89 139)"/>
+            </g>
+            <path class="bracket" d="M6,22 L6,6 L22,6"/>
+            <path class="bracket" d="M138,6 L154,6 L154,22"/>
+            <path class="bracket" d="M6,178 L6,194 L22,194"/>
+            <path class="bracket" d="M138,194 L154,194 L154,178"/>
+          </svg>
+        </div>
+        <span class="num">04</span>
+        <h4>随意抓拍</h4>
+        <span class="es">Libre · Just have fun</span>
+        <p>跳起来、走起来、笑出来。抓拍最自然的瞬间，往往是最好看的照片。</p>
+      </div>
+
+    </div>
   </div>
 </section>
 
