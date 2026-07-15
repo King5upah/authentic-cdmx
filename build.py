@@ -404,7 +404,7 @@ LANGS["zh"] = {
  "spot_eyebrow":"Dónde te llevo · 带你去哪","spot_h2":"真实、上镜、<br>游客不知道的地方","spot_tag":"Lugares con alma",
  "spots":[
    ("torre-night.jpg","CENTRO DE NOCHE","夜晚的历史中心","白天游客多，夜里才有魔力。Torre Latino、空荡的大道、暖黄路灯。出片率最高的时段。",False),
-   ("barrio-chino.jpg","BARRIO CHINO","老唐人街 Dolores 街","红灯笼、烟火气的窄巷。对你来说亲切又有反差 —— 墨西哥味的中国街，拍出来很有意思。",False),
+   ("cielo-abierto.jpg","PLAZA CIELO ABIERTO","天空广场 Cielo Abierto","红色拱廊 + 霓虹灯的现代空间。造型感强、超上镜 —— 拍出来像电影场景。",False),
    ("oxxo.jpg","CALLE · MERCADO","街头 & 市场","小卖部、水果摊、涂鸦墙。真正的城市日常，随手一拍就是故事，比景点真实一百倍。",False),
    ("reforma-dusk.jpg","ROMA · CONDESA","罗马 & 康德萨区","公开的秘密 —— 又潮又安全、最 foreign-friendly，咖啡馆和涂鸦墙确实好看。想拍网红风就来，但别只拍这里。",True),
    ("vocho.jpg","ICONOS · 城市符号","甲壳虫 & 城市符号","老 Vocho、棕榈树、复古招牌。这些细节才是墨西哥城的灵魂，明信片上没有。",False),
@@ -461,7 +461,7 @@ LANGS["en"] = {
  "spot_eyebrow":"Where I take you","spot_h2":"Real, photogenic,<br>off the tourist map","spot_tag":"Lugares con alma",
  "spots":[
    ("torre-night.jpg","CENTRO AT NIGHT","Downtown after dark","Crowded by day, magic at night. Torre Latino, empty avenues, warm street light. The highest hit-rate window there is.",False),
-   ("barrio-chino.jpg","BARRIO CHINO","Old Chinatown · Dolores St.","Red lanterns, a narrow buzzing alley. Small but full of character — a great contrast backdrop.",False),
+   ("cielo-abierto.jpg","PLAZA CIELO ABIERTO","Plaza Cielo Abierto","A modern open-air corridor with red arches and neon. Bold, cinematic, super photogenic — looks like a film set.",False),
    ("oxxo.jpg","CALLE · MERCADO","Streets & markets","Corner stores, fruit stands, graffiti walls. Real daily life — one frame and you've got a story, a hundred times more real than a landmark.",False),
    ("reforma-dusk.jpg","ROMA · CONDESA","Roma & Condesa","The worst-kept secret — trendy, safe, the most foreign-friendly. Cafés and murals really do look good. Come for the IG shot, just don't stop there.",True),
    ("vocho.jpg","ICONOS · city symbols","Vochos & city icons","Old VW Beetles, palm trees, retro signage. The details are the soul of this city — never on a postcard.",False),
@@ -519,7 +519,7 @@ LANGS["fr"].update({
  "spot_eyebrow":"Où je vous emmène","spot_h2":"Vrai, photogénique,<br>hors des sentiers touristiques","spot_tag":"Lugares con alma",
  "spots":[
    ("torre-night.jpg","CENTRO LA NUIT","Le centre après la tombée de la nuit","Bondé le jour, magique la nuit. Torre Latino, avenues désertes, lumière chaude. Le meilleur créneau pour de belles photos.",False),
-   ("barrio-chino.jpg","BARRIO CHINO","Vieux quartier chinois · rue Dolores","Lanternes rouges, ruelle étroite et animée. Petit mais plein de caractère — un superbe décor de contraste.",False),
+   ("cielo-abierto.jpg","PLAZA CIELO ABIERTO","Plaza Cielo Abierto","Un couloir moderne à ciel ouvert, arches rouges et néons. Graphique, cinématographique, très photogénique — on dirait un décor de film.",False),
    ("oxxo.jpg","CALLE · MERCADO","Rues & marchés","Épiceries de coin, étals de fruits, murs de graffitis. La vraie vie quotidienne — une image et vous avez une histoire, cent fois plus vraie qu'un monument.",False),
    ("reforma-dusk.jpg","ROMA · CONDESA","Roma & Condesa","Le secret le moins bien gardé — branché, sûr, le plus accueillant pour les étrangers. Cafés et fresques sont vraiment beaux. Venez pour la photo Insta, mais ne vous arrêtez pas là.",True),
    ("vocho.jpg","ICONOS · symboles","Vochos & symboles de la ville","Vieilles Coccinelles VW, palmiers, enseignes rétro. Les détails sont l'âme de cette ville — jamais sur une carte postale.",False),
@@ -592,7 +592,7 @@ LANGS["ja"].update({
  "spot_eyebrow":"案内する場所","spot_h2":"リアルで、絵になる、<br>観光地図にない場所","spot_tag":"Lugares con alma",
  "spots":[
    ("torre-night.jpg","CENTRO 夜","夜の歴史地区","昼は混雑、夜は魔法。Torre Latino、人のいない大通り、暖かい街灯。一番いい写真が撮れる時間帯です。",False),
-   ("barrio-chino.jpg","BARRIO CHINO","古い中華街 · Dolores通り","赤い提灯、活気ある細い路地。小さいけれど個性的 — コントラストの効いた背景に。",False),
+   ("cielo-abierto.jpg","PLAZA CIELO ABIERTO","Plaza Cielo Abierto","赤いアーチとネオンのモダンな開放型の通路。グラフィックで映画のような雰囲気、とても映える — まるでセットのよう。",False),
    ("oxxo.jpg","CALLE · MERCADO","街と市場","コンビニ、果物屋、グラフィティの壁。本物の日常 — 一枚で物語になる、観光名所より百倍リアル。",False),
    ("reforma-dusk.jpg","ROMA · CONDESA","Roma & Condesa","誰もが知る秘密 — おしゃれで安全、外国人に一番やさしい。カフェも壁画も確かに映える。SNS映えを撮りに来るならどうぞ、でもそこだけで終わらないで。",True),
    ("vocho.jpg","ICONOS · 街の象徴","Vocho と街の象徴","古いVWビートル、ヤシの木、レトロな看板。細部こそこの街の魂 — 絵はがきには写らない。",False),
