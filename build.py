@@ -65,9 +65,9 @@ CSS = r"""
   .btn-primary{background:var(--rosa);border-color:var(--rosa);color:#fff;}
   .btn-ghost{background:transparent;color:#fff;}
   .btn:focus-visible{outline:3px solid var(--amarillo);outline-offset:3px;}
-  .manifesto{background:var(--ink);color:var(--ground);text-align:center;}
+  .manifesto{background:#180B10;color:#FBEFF3;text-align:center;}
   .manifesto .eyebrow{color:var(--amarillo);}
-  .manifesto h2{font-size:clamp(30px,5.5vw,56px);line-height:1.06;margin:0 auto;max-width:22ch;color:var(--ground);}
+  .manifesto h2{font-size:clamp(30px,5.5vw,56px);line-height:1.06;margin:0 auto;max-width:22ch;color:#FBEFF3;}
   .manifesto h2 .hit{color:var(--rosa);font-style:italic;}
   .manifesto p{max-width:60ch;margin:26px auto 0;color:rgba(251,239,243,.72);font-size:18px;}
   .shead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:42px;}
@@ -110,9 +110,9 @@ CSS = r"""
   .dish .es{color:var(--verde);font-weight:700;font-size:13px;}
   .dish p{margin:6px 0 0;font-size:14px;color:var(--ink-soft);}
   .chili{color:var(--rosa-deep);font-weight:700;}
-  .myth-band{background:var(--ink);color:var(--ground);}
+  .myth-band{background:#180B10;color:#FBEFF3;}
   .myth-band .eyebrow{color:var(--amarillo);}
-  .myth-band h2{color:var(--ground);}
+  .myth-band h2{color:#FBEFF3;}
   .qa{columns:2 340px;column-gap:20px;}
   .qa-card{break-inside:avoid;margin:0 0 20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px;}
   .msg{display:flex;gap:11px;align-items:flex-start;}
@@ -368,7 +368,7 @@ def render(lang, C):
 </div></section>
 <section id="mitos" class="myth-band"><div class="wrap">
   <p class="eyebrow">%(myth_eyebrow)s</p>
-  <div class="shead"><h2 style="color:var(--ground)">%(myth_h2)s</h2></div>
+  <div class="shead"><h2 style="color:#FBEFF3">%(myth_h2)s</h2></div>
   <div class="qa">%(myths)s</div>
 </div></section>
 <section id="foto"><div class="wrap">
