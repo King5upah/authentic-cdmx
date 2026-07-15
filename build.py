@@ -102,13 +102,22 @@ CSS = r"""
   .myth-band{background:var(--ink);color:var(--ground);}
   .myth-band .eyebrow{color:var(--amarillo);}
   .myth-band h2{color:var(--ground);}
-  .myths{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-  @media (max-width:720px){ .myths{grid-template-columns:1fr;} }
-  .myth{border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px;background:rgba(255,255,255,.03);}
-  .myth .tag{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;}
-  .myth .tag.f{color:#ff6b6b;} .myth .tag.t{color:#4fd1a5;}
-  .myth h4{margin:8px 0 6px;font-family:var(--serif);font-size:22px;color:var(--ground);}
-  .myth p{margin:0;color:rgba(251,239,243,.75);font-size:15px;}
+  .qa{columns:2 340px;column-gap:20px;}
+  .qa-card{break-inside:avoid;margin:0 0 20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px;}
+  .msg{display:flex;gap:11px;align-items:flex-start;}
+  .msg .av{width:36px;height:36px;border-radius:50%;flex:0 0 36px;display:grid;place-items:center;font-weight:800;font-size:15px;overflow:hidden;}
+  .msg-in .av{background:rgba(255,255,255,.16);color:#fff;}
+  .msg-out .av{background:var(--rosa);color:#fff;}
+  .msg .col{display:flex;flex-direction:column;min-width:0;flex:1;}
+  .msg .who{font-size:12px;font-weight:700;margin:0 0 4px;color:rgba(251,239,243,.55);}
+  .msg .who .ok{color:#4fd1a5;}
+  .msg .bubble{border-radius:14px;padding:11px 14px;font-size:15px;line-height:1.5;}
+  .msg-in .bubble{background:rgba(255,255,255,.08);color:rgba(251,239,243,.92);border-top-left-radius:4px;}
+  .msg-out{flex-direction:row-reverse;}
+  .msg-out .col{align-items:flex-end;}
+  .msg-out .who{text-align:right;color:rgba(255,255,255,.7);}
+  .msg-out .bubble{background:var(--rosa);color:#fff;border-top-right-radius:4px;}
+  @media (max-width:520px){ .msg-out{flex-direction:row;} .msg-out .col{align-items:flex-start;} .msg-out .who{text-align:left;} }
   .planos-band{background:color-mix(in srgb,var(--verde) 7%,var(--ground));}
   .planos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
   @media (max-width:860px){ .planos{grid-template-columns:1fr 1fr;} }
@@ -198,9 +207,13 @@ def render(lang, C):
         % (i + 1, name, es, desc)
         for i, (name, es, desc) in enumerate(C["dishes"]))
     myths = "".join(
-        '<div class="myth"><span class="tag %s">%s</span><h4>%s</h4><p>%s</p></div>'
-        % (("f" if kind == "myth" else "t"), tag, h4, p)
-        for kind, tag, h4, p in C["myths"])
+        '<div class="qa-card">'
+        '<div class="msg msg-in"><div class="av">?</div><div class="col">'
+        '<p class="who">%s</p><div class="bubble">%s</div></div></div>'
+        '<div class="msg msg-out"><div class="av">R</div><div class="col">'
+        '<p class="who">%s <span class="ok">&#10003;</span></p><div class="bubble">%s</div></div></div>'
+        '</div>' % (C["anon_label"], q, C["me_label"], a)
+        for q, a in C["myths"])
     planos = "".join(
         '<div class="plano"><div class="frame">%s</div><span class="num">%02d</span><h4>%s</h4><span class="es">%s</span><p>%s</p></div>'
         % (SVG[key], i + 1, h4, es, p)
@@ -227,9 +240,9 @@ def render(lang, C):
     faq = {
         "@context": "https://schema.org", "@type": "FAQPage",
         "mainEntity": [
-            {"@type": "Question", "name": strip_tags(h4),
-             "acceptedAnswer": {"@type": "Answer", "text": strip_tags(p)}}
-            for _kind, _tag, h4, p in C["myths"]],
+            {"@type": "Question", "name": strip_tags(q),
+             "acceptedAnswer": {"@type": "Answer", "text": strip_tags(a)}}
+            for q, a in C["myths"]],
     }
     offers = [
         {"@type": "Offer", "name": pk["name"], "price": pk["price"].replace("$", ""),
@@ -337,7 +350,7 @@ def render(lang, C):
 <section id="mitos" class="myth-band"><div class="wrap">
   <p class="eyebrow">%(myth_eyebrow)s</p>
   <div class="shead"><h2 style="color:var(--ground)">%(myth_h2)s</h2></div>
-  <div class="myths">%(myths)s</div>
+  <div class="qa">%(myths)s</div>
 </div></section>
 <section id="foto"><div class="wrap">
   <p class="eyebrow">%(pack_eyebrow)s</p>
@@ -418,14 +431,15 @@ LANGS["zh"] = {
    ("Elote / Esquite","墨西哥烤玉米","玉米抹蛋黄酱、芝士粉、辣椒粉、青柠。街头小吃之王。"),
    ("Barrio Chino","唐人街","<span class=\"chili\">先说清楚：这里的「中餐」是墨西哥化的，别期待家乡味。</span>但拍照氛围很好。"),
    ("正宗中餐","Auténtico","想吃地道川菜/粤菜？我带你去本地华人真正吃的馆子，不踩雷。")],
- "myth_eyebrow":"Mitos y verdades · 谣言粉碎机","myth_h2":"来之前你担心的，<br>其实是这样",
+ "myth_eyebrow":"Mitos y verdades · 谣言粉碎机","myth_h2":"你私信问我的，<br>我一条条回你",
+ "anon_label":"匿名 · 游客","me_label":"Rodo · Authentic CDMX",
  "myths":[
-   ("myth","谣言 MITO","「墨西哥城超级危险」","真相：旅游区白天很安全。晚上用 Uber、别露富，跟任何大城市一样。有本地人带更放心 —— 我知道哪条街该走、哪条不该。"),
-   ("myth","谣言 MITO","「所有东西都超辣」","真相：辣椒酱是分开放的，你可以完全不加。会说「sin chile」就行。"),
-   ("truth","真相 VERDAD","自来水不要直接喝","喝瓶装水 agua embotellada。餐厅冰块通常是净化水，正常吃没问题。"),
-   ("truth","真相 VERDAD","要给小费 propina","餐厅 10–15%。Uber、Google 翻译好用；但微信/支付宝几乎不收，备好现金和一张 Visa。"),
-   ("truth","真相 VERDAD","海拔 2240 米","墨西哥城在高原，走快会喘、少数人轻微高反。第一天别排太满，多喝水。"),
-   ("myth","谣言 MITO","「语言完全不通」","真相：旅游区能用基础英语。有我在，英语 / 西语全程沟通，点菜、打车、砍价都不用你操心。")],
+   ("听说墨西哥城很危险，我有点怕…是真的吗？😟","旅游区白天很安全。晚上叫 Uber、别露富，跟任何大城市一样。有我带着，我知道哪条街该走、哪条别走。"),
+   ("是不是所有东西都很辣？我吃不了辣 🌶️","不会。辣椒酱都是分开放的，你完全可以不加。会说一句「sin chile」就行。"),
+   ("自来水能喝吗？","别直接喝，买瓶装水 agua embotellada。餐厅的冰块一般是净化水，正常吃没问题。"),
+   ("需要给小费吗？给多少？","餐厅 10–15%。带点现金和一张 Visa —— 微信 / 支付宝这边商家几乎不收。"),
+   ("听说海拔很高，会不会有高原反应？","墨西哥城 2240 米，走快可能会喘，少数人轻微高反。第一天别排太满，多喝水就好。"),
+   ("我西语和英语都不太行，能沟通吗？😅","旅游区基础英语能用。有我在，英语 / 西语全程沟通 —— 点菜、打车、砍价都交给我。")],
  "pack_eyebrow":"约拍套餐 · Paquetes","pack_h2":"周末约拍<br>向导 + 摄影 一次搞定","pack_tag":"Fotógrafo local",
  "packs":[
    {"cls":"","badge":None,"badge_cls":"","name":"City Walk","price":"$120","unit":"/2小时","ref":"≈ 700 元","features":["一个地点","精修 25 张","向导 + 拍摄","3 天内交付"],"btn":"预约","sold":False},
@@ -475,14 +489,15 @@ LANGS["en"] = {
    ("Elote / Esquite","Mexican street corn","Corn with mayo, cheese, chili powder, lime. King of street snacks."),
    ("Barrio Chino","Chinatown","<span class=\"chili\">Heads up: the “Chinese” food here is Mexican-ized — don't expect the real thing.</span> Great photo vibe though."),
    ("Real Chinese","Auténtico","Craving proper Sichuan/Cantonese? I'll take you where the local Chinese community actually eats.")],
- "myth_eyebrow":"Myths & truths","myth_h2":"What you're worried about<br>before coming — the truth",
+ "myth_eyebrow":"Myths & truths","myth_h2":"The stuff you DM me —<br>answered, one by one",
+ "anon_label":"Anonymous · traveler","me_label":"Rodo · Authentic CDMX",
  "myths":[
-   ("myth","MYTH","“Mexico City is super dangerous”","Truth: tourist areas are fine by day. At night use Uber, don't flash valuables — same as any big city. Safer with a local — I know which streets to take and which to skip."),
-   ("myth","MYTH","“Everything is spicy”","Truth: the salsa is on the side. You control it. Just say “no spicy / sin chile.”"),
-   ("truth","TRUE","Don't drink the tap water","Stick to bottled water. Restaurant ice is usually purified — you'll be fine eating out."),
-   ("truth","TRUE","Tipping is expected","10–15% at restaurants. Uber and Google Translate work great. Bring some cash + a Visa card."),
-   ("truth","TRUE","Altitude: 7,350 ft (2,240 m)","The city sits high. You may get slightly winded walking fast. Don't over-pack day one, drink water."),
-   ("myth","MYTH","“Nobody speaks my language”","Truth: basic English works in tourist zones. With me it's fully English/Spanish — ordering, taxis, haggling all handled.")],
+   ("Everyone says Mexico City is dangerous… is it really that bad? 😟","Tourist areas are fine by day. At night take Uber, don't flash valuables — same as any big city. With me you're covered: I know which streets to take and which to skip."),
+   ("Is everything super spicy? I can't handle heat 🌶️","Nope. The salsa is always on the side — just don't add it. Say “sin chile” and you're good."),
+   ("Can I drink the tap water?","Don't drink it straight — grab bottled water. Restaurant ice is usually purified, so eating out is fine."),
+   ("Do I need to tip? How much?","10–15% at restaurants. Bring some cash + a Visa — WeChat/Alipay aren't really accepted here."),
+   ("I heard the altitude is high — will I feel it?","Mexico City sits at 2,240 m (7,350 ft). You might get a little winded walking fast. Take day one easy and drink water."),
+   ("My English and Spanish aren't great — can we still communicate? 😅","Basic English works in tourist zones. With me it's fully English/Spanish — ordering, taxis, haggling all handled.")],
  "pack_eyebrow":"Packages · Paquetes","pack_h2":"Weekend sessions<br>guide + photographer in one","pack_tag":"Fotógrafo local",
  "packs":[
    {"cls":"","badge":None,"badge_cls":"","name":"City Walk","price":"$120","unit":"/2 hrs","ref":"USD","features":["One location","25 edited photos","Guide + shoot","Delivered in 3 days"],"btn":"Book","sold":False},
@@ -533,14 +548,15 @@ LANGS["fr"].update({
    ("Elote / Esquite","maïs de rue mexicain","Maïs avec mayo, fromage, piment en poudre, citron vert. Le roi du snack de rue."),
    ("Barrio Chino","quartier chinois","<span class=\"chili\">Attention : la cuisine « chinoise » ici est mexicanisée — n'attendez pas l'authentique.</span> Mais l'ambiance photo est top."),
    ("Vrai chinois","Auténtico","Envie de vrai sichuanais/cantonais ? Je vous emmène là où la communauté chinoise locale mange vraiment.")],
- "myth_eyebrow":"Mythes & vérités","myth_h2":"Ce qui vous inquiète<br>avant de venir — la vérité",
+ "myth_eyebrow":"Mythes & vérités","myth_h2":"Ce que vous me demandez en DM —<br>je réponds, une par une",
+ "anon_label":"Anonyme · voyageur","me_label":"Rodo · Authentic CDMX",
  "myths":[
-   ("myth","MYTHE","« Mexico est ultra dangereux »","Vérité : les zones touristiques sont sûres de jour. Le soir, Uber, ne pas exhiber d'objets de valeur — comme dans toute grande ville. Plus tranquille avec un local — je sais quelles rues prendre et lesquelles éviter."),
-   ("myth","MYTHE","« Tout est piquant »","Vérité : la sauce est à part. Vous dosez. Dites simplement « no spicy / sin chile »."),
-   ("truth","VRAI","Ne buvez pas l'eau du robinet","De l'eau en bouteille. Les glaçons au restaurant sont en général purifiés — pas de souci pour manger dehors."),
-   ("truth","VRAI","Le pourboire est attendu","10–15 % au restaurant. Uber et Google Traduction marchent très bien. Prévoyez du liquide + une carte Visa."),
-   ("truth","VRAI","Altitude : 2 240 m","La ville est en altitude. Vous serez peut-être vite essoufflé. Ne surchargez pas le premier jour, buvez de l'eau."),
-   ("myth","MYTHE","« Personne ne parle ma langue »","Vérité : l'anglais de base passe dans les zones touristiques. Avec moi, tout se fait en anglais/espagnol — commandes, taxis, négociation, je gère.")],
+   ("Tout le monde dit que Mexico est dangereux… c'est vraiment le cas ? 😟","Les zones touristiques sont sûres de jour. Le soir, Uber, pas d'objets de valeur en vue — comme dans toute grande ville. Avec moi vous êtes couvert : je sais quelles rues prendre et lesquelles éviter."),
+   ("Est-ce que tout est très épicé ? Je ne supporte pas 🌶️","Non. La sauce est toujours à part — il suffit de ne pas en mettre. Dites « sin chile » et c'est réglé."),
+   ("Est-ce que je peux boire l'eau du robinet ?","Ne la buvez pas telle quelle — prenez de l'eau en bouteille. Les glaçons au restaurant sont en général purifiés, donc manger dehors ne pose pas de souci."),
+   ("Faut-il laisser un pourboire ? Combien ?","10–15 % au restaurant. Prévoyez du liquide + une carte Visa — WeChat/Alipay ne sont quasiment pas acceptés ici."),
+   ("On m'a dit que l'altitude est élevée — vais-je la ressentir ?","Mexico est à 2 240 m. Vous serez peut-être un peu essoufflé en marchant vite. Allez-y doucement le premier jour et buvez de l'eau."),
+   ("Mon anglais et mon espagnol sont limités — on pourra communiquer ? 😅","L'anglais de base passe dans les zones touristiques. Avec moi, tout se fait en anglais/espagnol — commandes, taxis, négociation, je gère.")],
  "pack_eyebrow":"Formules · Paquetes","pack_h2":"Séances le week-end<br>guide + photographe en un","pack_tag":"Fotógrafo local",
  "packs":[
    {"cls":"","badge":None,"badge_cls":"","name":"City Walk","price":"$120","unit":"/2 h","ref":"USD","features":["Un lieu","25 photos retouchées","Guide + prise de vue","Livraison en 3 jours"],"btn":"Réserver","sold":False},
@@ -567,12 +583,12 @@ LANGS["intl"].update({
  "kicker":"MEXICO CITY · THE REAL ONE",
  "sub":"A local photographer takes you to shoot the city as it actually is — not the postcard. Weekend sessions + guide. English & Spanish, travellers welcome from anywhere.",
  "myths":[
-   ("myth","MYTH","“Mexico City is super dangerous”","Truth: tourist areas are fine by day. At night use Uber, don't flash valuables — same as any big city. Safer with a local — I know which streets to take and which to skip."),
-   ("myth","MYTH","“Everything is spicy”","Truth: the salsa is on the side. You control it. Just say “no spicy / sin chile.”"),
-   ("truth","TRUE","Don't drink the tap water","Stick to bottled water. Restaurant ice is usually purified — you'll be fine eating out."),
-   ("truth","TRUE","Tipping is expected","10–15% at restaurants. Uber and Google Translate work great. Bring some cash + a Visa/Mastercard."),
-   ("truth","TRUE","Altitude: 2,240 m (7,350 ft)","The city sits high. You may get slightly winded walking fast. Don't over-pack day one, drink water."),
-   ("myth","MYTH","“Nobody speaks my language”","Truth: basic English works in tourist zones. With me it's fully English/Spanish — ordering, taxis, haggling all handled.")],
+   ("Everyone says Mexico City is dangerous… is it really that bad? 😟","Tourist areas are fine by day. At night take Uber, don't flash valuables — same as any big city. With me you're covered: I know which streets to take and which to skip."),
+   ("Is everything super spicy? I can't handle heat 🌶️","Nope. The salsa is always on the side — just don't add it. Say “sin chile” and you're good."),
+   ("Can I drink the tap water?","Don't drink it straight — grab bottled water. Restaurant ice is usually purified, so eating out is fine."),
+   ("Do I need to tip? How much?","10–15% at restaurants. Bring some cash + a Visa/Mastercard — mobile wallets aren't really accepted here."),
+   ("I heard the altitude is high — will I feel it?","Mexico City sits at 2,240 m (7,350 ft). You might get a little winded walking fast. Take day one easy and drink water."),
+   ("My English isn't perfect — can we still communicate? 😅","Basic English works in tourist zones. With me it's fully English/Spanish — ordering, taxis, haggling all handled.")],
 })
 
 # ---------- JA ----------
@@ -606,14 +622,15 @@ LANGS["ja"].update({
    ("Elote / Esquite","メキシコ流焼きトウモロコシ","トウモロコシにマヨ、チーズ、唐辛子粉、ライム。屋台スナックの王様。"),
    ("Barrio Chino","中華街","<span class=\"chili\">先に言うと、ここの「中華」はメキシコ風 — 本場の味は期待しないで。</span>でも写真の雰囲気は最高。"),
    ("本場の中華","Auténtico","本格的な四川/広東料理が食べたい？地元の華人が実際に通う店へ案内します。")],
- "myth_eyebrow":"Mitos y verdades · 誤解と真実","myth_h2":"来る前に心配なこと、<br>本当はこうです",
+ "myth_eyebrow":"Mitos y verdades · 誤解と真実","myth_h2":"DMで届く質問に、<br>ひとつずつ答えます",
+ "anon_label":"匿名 · 旅行者","me_label":"Rodo · Authentic CDMX",
  "myths":[
-   ("myth","誤解 MYTH","「メキシコシティはとても危険」","真実：観光エリアは昼間は安全。夜はUberを使い、貴重品を見せない — どの大都市とも同じ。地元民が一緒なら安心 — どの道を通り、どの道を避けるか知っています。"),
-   ("myth","誤解 MYTH","「何でもかんでも辛い」","真実：サルサは別添え。自分で調整できます。「no spicy / sin chile」と言えばOK。"),
-   ("truth","真実 TRUE","水道水は飲まない","ボトル入りの水を。レストランの氷は普通は浄水なので、外食は問題ありません。"),
-   ("truth","真実 TRUE","チップが必要","レストランで10〜15%。UberもGoogle翻訳も便利。現金とVisaカードを用意して。"),
-   ("truth","真実 TRUE","標高2,240m","高地の街です。早歩きで少し息切れするかも。初日は詰め込みすぎず、水分を。"),
-   ("myth","誤解 MYTH","「言葉が全く通じない」","真実：観光地では基本英語が通じます。私がいれば英語・スペイン語で全部対応 — 注文、タクシー、値段交渉、全部お任せ。")],
+   ("メキシコシティは危険ってよく聞くけど…本当に危ない？😟","観光エリアは昼間は安全です。夜はUber、貴重品は見せない — どの大都市とも同じ。私が一緒なら安心、どの道を通りどの道を避けるか分かっています。"),
+   ("何でも辛いんですか？辛いのが苦手で 🌶️","大丈夫。サルサは必ず別添えなので、入れなければOK。「sin chile」と言えば辛さ抜きです。"),
+   ("水道水は飲めますか？","そのままは飲まないで、ボトル入りの水を。レストランの氷はたいてい浄水なので、外食は問題ありません。"),
+   ("チップは必要？いくら？","レストランで10〜15%。現金とVisaカードを用意して — WeChat/Alipayはこちらではほぼ使えません。"),
+   ("標高が高いと聞きました — 影響ありますか？","メキシコシティは標高2,240m。早歩きで少し息切れするかも。初日は無理せず、水分をしっかり。"),
+   ("英語もスペイン語も得意じゃないけど、やり取りできますか？😅","観光地では基本英語が通じます。私がいれば英語・スペイン語で全部対応 — 注文、タクシー、交渉、お任せください。")],
  "pack_eyebrow":"撮影プラン · Paquetes","pack_h2":"週末の撮影<br>ガイド + フォトグラファーを一度に","pack_tag":"Fotógrafo local",
  "packs":[
    {"cls":"","badge":None,"badge_cls":"","name":"City Walk","price":"$120","unit":"/2時間","ref":"USD","features":["1か所","編集済み写真25枚","ガイド + 撮影","3日以内に納品"],"btn":"予約する","sold":False},
