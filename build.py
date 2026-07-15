@@ -10,7 +10,7 @@ import json
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = "https://authentic-cdmx.com"
 OG_IMG = SITE + "/img/og-image.jpg"
-OG_LOCALE = {"zh": "zh_CN", "en": "en_US", "fr": "fr_FR", "intl": "en_US"}
+OG_LOCALE = {"zh": "zh_CN", "ja": "ja_JP", "en": "en_US", "fr": "fr_FR", "intl": "en_US"}
 
 
 def strip_tags(s):
@@ -171,10 +171,10 @@ SVG = {
 }
 
 # idiomas y rutas
-LANG_ORDER = ["zh", "en", "fr", "intl"]
-LANG_PATH = {"zh": "/", "en": "/en/", "fr": "/fr/", "intl": "/intl/"}
-LANG_LABEL = {"zh": "中文", "en": "EN·US", "fr": "FR", "intl": "EN·Intl"}
-HREFLANG = {"zh": "zh", "en": "en-US", "fr": "fr", "intl": "en"}
+LANG_ORDER = ["zh", "ja", "en", "fr", "intl"]
+LANG_PATH = {"zh": "/", "ja": "/ja/", "en": "/en/", "fr": "/fr/", "intl": "/intl/"}
+LANG_LABEL = {"zh": "中文", "ja": "日本語", "en": "EN·US", "fr": "FR", "intl": "EN·Intl"}
+HREFLANG = {"zh": "zh", "ja": "ja", "en": "en-US", "fr": "fr", "intl": "en"}
 
 
 def langbar(cur):
@@ -231,6 +231,12 @@ def render(lang, C):
              "acceptedAnswer": {"@type": "Answer", "text": strip_tags(p)}}
             for _kind, _tag, h4, p in C["myths"]],
     }
+    offers = [
+        {"@type": "Offer", "name": pk["name"], "price": pk["price"].replace("$", ""),
+         "priceCurrency": "USD", "availability":
+             "https://schema.org/SoldOut" if pk.get("sold") else "https://schema.org/InStock",
+         "description": " · ".join(strip_tags(f) for f in pk["features"])}
+        for pk in C["packs"]]
     biz = {
         "@context": "https://schema.org", "@type": "ProfessionalService",
         "@id": SITE + "/#business", "name": "Authentic CDMX",
@@ -240,8 +246,12 @@ def render(lang, C):
         "geo": {"@type": "GeoCoordinates", "latitude": 19.4326, "longitude": -99.1332},
         "priceRange": "$$", "email": "authenticcdmx@gmail.com",
         "sameAs": ["https://instagram.com/rod0cv"],
-        "knowsLanguage": ["es", "en", "fr", "zh"],
+        "knowsLanguage": ["es", "en", "fr", "zh", "ja"],
+        "availableLanguage": ["English", "Spanish"],
         "serviceType": "Travel and portrait photography, local guide",
+        "provider": {"@type": "Person", "name": "Rodo", "jobTitle": "Photographer & local guide",
+                     "sameAs": ["https://instagram.com/rod0cv"]},
+        "makesOffer": offers,
     }
     jsonld = ('<script type="application/ld+json">%s</script>'
               '<script type="application/ld+json">%s</script>') % (
@@ -350,7 +360,8 @@ def render(lang, C):
     <a class="chip" href="https://instagram.com/rod0cv" target="_blank" rel="noopener">Instagram <b>@rod0cv</b></a>
     <a class="chip" href="mailto:authenticcdmx@gmail.com">Email <b>authenticcdmx@gmail.com</b></a>
   </div>
-  <p class="lede" style="margin:24px auto 0;">%(con_lede)s</p>
+  <p class="note" style="max-width:520px;margin:22px auto 0;text-align:left;">%(con_comm)s</p>
+  <p class="lede" style="margin:18px auto 0;">%(con_lede)s</p>
 </div></section>
 <footer>%(footer)s</footer>
 </body>
@@ -366,7 +377,7 @@ def render(lang, C):
         pack_eyebrow=C["pack_eyebrow"], pack_h2=C["pack_h2"], pack_tag=C["pack_tag"], packs=packs, pack_note=C["pack_note"],
         plano_eyebrow=C["plano_eyebrow"], plano_h2=C["plano_h2"], plano_tag=C["plano_tag"], plano_lede=C["plano_lede"], planos=planos,
         con_eyebrow=C["con_eyebrow"], con_h2=C["con_h2"], con_wechat=C["con_wechat"], con_lede=C["con_lede"],
-        footer=C["footer"],
+        con_comm=C["con_comm"], footer=C["footer"],
     )
     return html
 
@@ -429,6 +440,7 @@ LANGS["zh"] = {
    ("portrait","人像特写","Retrato · Portrait","头肩为主，背景虚化。突出表情和情绪，最适合当头像、当封面。"),
    ("fun","随意抓拍","Libre · Just have fun","跳起来、走起来、笑出来。抓拍最自然的瞬间，往往是最好看的照片。")],
  "con_eyebrow":"Contacto · 联系我","con_h2":"加微信，聊聊你的<br>墨西哥城行程","con_wechat":"微信 WeChat",
+ "con_comm":"🗣 <b>沟通语言：英语 或 西班牙语。</b> 我不说中文，但全程用英语 / 西语沟通没问题，也会用翻译软件帮你点菜、打车、带路。<b>预约时请用英文或西班牙语留言。</b>",
  "con_lede":"告诉我你的日期、想去的地方、几个人 —— 我给你定制路线和报价。周末档期有限，建议提前一周约。",
  "footer":"Authentic CDMX · 墨西哥城本地摄影 &amp; 向导 · Ciudad de México<br>© 2026 · Todas las fotos por Rodo",
 }
@@ -485,6 +497,7 @@ LANGS["en"] = {
    ("portrait","Close portrait","Retrato · Portrait","Head and shoulders, background blurred. Emotion-forward — perfect for a profile pic or cover."),
    ("fun","Candid","Libre · Just have fun","Jump, walk, laugh. Candid moments are usually the best-looking shots.")],
  "con_eyebrow":"Contact","con_h2":"Message me — let's plan<br>your Mexico City shoot","con_wechat":"WeChat",
+ "con_comm":"🗣 <b>We communicate in English or Spanish.</b> Message me in either one — on the ground I'll handle ordering food, taxis and directions for you.",
  "con_lede":"Tell me your dates, where you want to go, and how many people — I'll build a custom route and quote. Weekend slots are limited, book about a week ahead.",
  "footer":"Authentic CDMX · Local photography &amp; guide · Ciudad de México<br>© 2026 · All photos by Rodo",
 }
@@ -542,6 +555,7 @@ LANGS["fr"].update({
    ("portrait","Portrait serré","Retrato · Portrait","Tête et épaules, arrière-plan flou. Centré sur l'émotion — parfait pour une photo de profil ou une couverture."),
    ("fun","Sur le vif","Libre · Just have fun","Sautez, marchez, riez. Les instants pris sur le vif sont souvent les plus réussis.")],
  "con_eyebrow":"Contact","con_h2":"Écrivez-moi — planifions<br>votre séance à Mexico","con_wechat":"WeChat",
+ "con_comm":"🗣 <b>Communication en anglais ou en espagnol.</b> Écrivez-moi dans l'une de ces langues — sur place, je m'occupe des commandes, des taxis et de l'itinéraire pour vous.",
  "con_lede":"Dites-moi vos dates, où vous voulez aller et combien vous êtes — je construis un itinéraire et un devis sur mesure. Les créneaux du week-end sont limités, réservez environ une semaine à l'avance.",
  "footer":"Authentic CDMX · Photographie &amp; guide local · Ciudad de México<br>© 2026 · Toutes les photos par Rodo",
 })
@@ -561,8 +575,66 @@ LANGS["intl"].update({
    ("myth","MYTH","“Nobody speaks my language”","Truth: basic English works in tourist zones. With me it's fully English/Spanish — ordering, taxis, haggling all handled.")],
 })
 
+# ---------- JA ----------
+LANGS["ja"] = dict(LANGS["en"])
+LANGS["ja"].update({
+ "htmllang":"ja","title":"Authentic CDMX · 本当のメキシコシティ撮影ツアー",
+ "desc":"地元フォトグラファーが「本当の」メキシコシティを撮影 — 絵はがきではない、街のリアルな姿を。週末の撮影 + ガイド。",
+ "nav":[("trabajo","作品"),("lugares","案内"),("comida","食事"),("mitos","誤解"),("foto","予約"),("planos","構図"),("contacto","連絡")],
+ "kicker":"メキシコシティ · 本当の姿","h1":"本当の<br><span class=\"es\">メキシコシティ</span>",
+ "sub":"地元フォトグラファーが、街のありのままの姿を撮影します — 絵はがきではなく。週末の撮影 + ガイド。英語・スペイン語で対応。",
+ "cta1":"プランを見る →","cta2":"作品を見る",
+ "man_eyebrow":"Manifiesto · 私の流儀",
+ "man_h2":"Roma と Condesa も良い — でもそこは<span class=\"hit\">誰もが知る秘密</span>。私は誰も撮らない場所にも案内します。",
+ "man_p":"Roma と Condesa はおしゃれで安全、外国人にもやさしい — 行きたいなら行きましょう、価値はあります。でもあのカフェは何百回も撮られています。私はむしろ、夜の大通り、古い中華街、街のネオンや市場に案内したい — 本物の光、本物の物語、誰も持っていない写真。両方？もちろん大歓迎。",
+ "port_eyebrow":"Portafolio · 作品","port_h2":"この街を、<br>私のレンズで","port_tag":"All shot in CDMX",
+ "gallery":GAL(["ポートレート · 街角","Ángel de la Independencia","Reforma · 夕暮れ","コロニアルな門","Vocho · VWビートル","Mural · 翼の壁画","夜 · 交差点","Monumento a la Revolución","街角の日常","Neón · ネオン","Mural · 龍","Movimiento · 躍動"]),
+ "spot_eyebrow":"案内する場所","spot_h2":"リアルで、絵になる、<br>観光地図にない場所","spot_tag":"Lugares con alma",
+ "spots":[
+   ("torre-night.jpg","CENTRO 夜","夜の歴史地区","昼は混雑、夜は魔法。Torre Latino、人のいない大通り、暖かい街灯。一番いい写真が撮れる時間帯です。",False),
+   ("barrio-chino.jpg","BARRIO CHINO","古い中華街 · Dolores通り","赤い提灯、活気ある細い路地。小さいけれど個性的 — コントラストの効いた背景に。",False),
+   ("oxxo.jpg","CALLE · MERCADO","街と市場","コンビニ、果物屋、グラフィティの壁。本物の日常 — 一枚で物語になる、観光名所より百倍リアル。",False),
+   ("reforma-dusk.jpg","ROMA · CONDESA","Roma & Condesa","誰もが知る秘密 — おしゃれで安全、外国人に一番やさしい。カフェも壁画も確かに映える。SNS映えを撮りに来るならどうぞ、でもそこだけで終わらないで。",True),
+   ("vocho.jpg","ICONOS · 街の象徴","Vocho と街の象徴","古いVWビートル、ヤシの木、レトロな看板。細部こそこの街の魂 — 絵はがきには写らない。",False),
+   ("skyline-sunset.jpg","ROOFTOP · 夕日","屋上のゴールデンアワー","大きなスカイラインが欲しい？登れる屋上をいくつか知っています。夕日の一連で完璧に。",False)],
+ "spot_note":"🗺️ テオティワカン遺跡、ソチミルコ、Roma/Condesa の定番も手配できます。でも誰も持っていない写真が欲しいなら、上の穴場こそが本命です。",
+ "food_eyebrow":"何を食べる","food_h2":"必食のメキシコ料理 &<br>本場の中華はどこで","food_tag":"Sabores",
+ "dishes":[
+   ("Tacos al pastor","串焼き豚のタコス","マリネした豚肉 + パイナップルをトルティーヤで。<span class=\"chili\">辛さは控えめ、「sin picante」で辛さ抜き。</span>"),
+   ("Birria","煮込み肉 + スープ","じっくり煮た山羊/牛肉を、スープに浸して食べるタコス。誰でも食べやすい — 地元民が並ぶ屋台へ案内します。"),
+   ("Mole","唐辛子チョコソース","唐辛子 + チョコ + スパイスのソースを鶏肉に。複雑な味、プエブラの名物。"),
+   ("Elote / Esquite","メキシコ流焼きトウモロコシ","トウモロコシにマヨ、チーズ、唐辛子粉、ライム。屋台スナックの王様。"),
+   ("Barrio Chino","中華街","<span class=\"chili\">先に言うと、ここの「中華」はメキシコ風 — 本場の味は期待しないで。</span>でも写真の雰囲気は最高。"),
+   ("本場の中華","Auténtico","本格的な四川/広東料理が食べたい？地元の華人が実際に通う店へ案内します。")],
+ "myth_eyebrow":"Mitos y verdades · 誤解と真実","myth_h2":"来る前に心配なこと、<br>本当はこうです",
+ "myths":[
+   ("myth","誤解 MYTH","「メキシコシティはとても危険」","真実：観光エリアは昼間は安全。夜はUberを使い、貴重品を見せない — どの大都市とも同じ。地元民が一緒なら安心 — どの道を通り、どの道を避けるか知っています。"),
+   ("myth","誤解 MYTH","「何でもかんでも辛い」","真実：サルサは別添え。自分で調整できます。「no spicy / sin chile」と言えばOK。"),
+   ("truth","真実 TRUE","水道水は飲まない","ボトル入りの水を。レストランの氷は普通は浄水なので、外食は問題ありません。"),
+   ("truth","真実 TRUE","チップが必要","レストランで10〜15%。UberもGoogle翻訳も便利。現金とVisaカードを用意して。"),
+   ("truth","真実 TRUE","標高2,240m","高地の街です。早歩きで少し息切れするかも。初日は詰め込みすぎず、水分を。"),
+   ("myth","誤解 MYTH","「言葉が全く通じない」","真実：観光地では基本英語が通じます。私がいれば英語・スペイン語で全部対応 — 注文、タクシー、値段交渉、全部お任せ。")],
+ "pack_eyebrow":"撮影プラン · Paquetes","pack_h2":"週末の撮影<br>ガイド + フォトグラファーを一度に","pack_tag":"Fotógrafo local",
+ "packs":[
+   {"cls":"","badge":None,"badge_cls":"","name":"City Walk","price":"$120","unit":"/2時間","ref":"USD","features":["1か所","編集済み写真25枚","ガイド + 撮影","3日以内に納品"],"btn":"予約する","sold":False},
+   {"cls":"feat","badge":"残りわずか","badge_cls":"low","name":"Half Day","price":"$220","unit":"/4時間","ref":"USD","features":["2〜3か所、穴場含む","編集済み写真60枚","ガイド + 撮影 + ルート設計","タクシー・注文サポート","2日以内に納品"],"btn":"今すぐ予約 →","sold":False},
+   {"cls":"sold","badge":"満席 SOLD OUT","badge_cls":"sold","name":"Full Day","price":"$320","unit":"/1日","ref":"USD","features":["終日撮影（遺跡オプション）","編集済み写真100枚","移動の手配","日の出 / 屋上スポット"],"btn":"満席","sold":True}],
+ "pack_note":"💵 価格は仮です — 実際の料金に差し替えてください。支払い方法を明記（現金 / 送金 / カード）。",
+ "plano_eyebrow":"構図のタイプ","plano_h2":"予約前に、<br>どんな写真が欲しいか教えて","plano_tag":"構図を選ぶ",
+ "plano_lede":"連絡の際に「1番 / 2番がいい」と一言でOK。決まっていなくても大丈夫 — 現場で私が決めます。大事なのは楽しむこと。",
+ "planos":[
+   ("wide","全身 + 背景","Plano general · Wide","人物は小さく、景色は大きく。ランドマーク、街、スカイライン向け — あなたと街が一枚に。"),
+   ("american","膝上","Plano americano","太もも中ほどから上。定番のエディトリアル感 — 服装も少し背景も見える。"),
+   ("portrait","クローズアップ","Retrato · Portrait","顔と肩、背景はぼかし。感情を前面に — プロフィール写真や表紙に最適。"),
+   ("fun","スナップ","Libre · Just have fun","飛んで、歩いて、笑って。自然な瞬間こそ一番いい写真になることが多い。")],
+ "con_eyebrow":"Contacto · 連絡","con_h2":"メッセージをどうぞ —<br>メキシコシティ撮影を計画しましょう","con_wechat":"WeChat",
+ "con_comm":"🗣 <b>やり取りは英語またはスペイン語です。</b> 日本語は話せませんが、現地では英語・スペイン語で対応し、翻訳アプリも使います。<b>ご予約は英語かスペイン語でメッセージください。</b>",
+ "con_lede":"日程、行きたい場所、人数を教えてください — オーダーメイドのルートと見積もりを作ります。週末は枠が限られるので、1週間前の予約がおすすめです。",
+ "footer":"Authentic CDMX · メキシコシティの地元撮影 &amp; ガイド · Ciudad de México<br>© 2026 · All photos by Rodo",
+})
+
 if __name__ == "__main__":
-    targets = {"zh": ROOT, "en": os.path.join(ROOT, "en"), "fr": os.path.join(ROOT, "fr"), "intl": os.path.join(ROOT, "intl")}
+    targets = {l: (ROOT if l == "zh" else os.path.join(ROOT, l)) for l in LANG_ORDER}
     for lang, path in targets.items():
         os.makedirs(path, exist_ok=True)
         html = render(lang, LANGS[lang])
@@ -578,8 +650,53 @@ if __name__ == "__main__":
                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(sitemap)
-    # robots.txt
-    robots = "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE
+    # robots.txt — permite explícitamente crawlers de IA (GEO)
+    ai_bots = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-Web",
+               "anthropic-ai", "PerplexityBot", "Google-Extended", "Applebot-Extended",
+               "Bingbot", "Amazonbot", "CCBot"]
+    robots = "User-agent: *\nAllow: /\n\n"
+    for b in ai_bots:
+        robots += "User-agent: %s\nAllow: /\n\n" % b
+    robots += "Sitemap: %s/sitemap.xml\n" % SITE
     with open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8") as f:
         f.write(robots)
-    print("wrote sitemap.xml + robots.txt")
+
+    # llms.txt — resumen para LLMs (Claude, ChatGPT, Perplexity)
+    llms = """# Authentic CDMX
+
+> Local photographer and guide in Mexico City (Ciudad de México). Weekend photo sessions that capture the real city — street, night avenues, old Chinatown, markets, murals — not just the postcard spots. Guide + photographer in one. Communication in English or Spanish.
+
+## What it is
+- Service: travel & portrait photography plus local guiding in Mexico City.
+- Photographer: Rodo. Instagram: https://instagram.com/rod0cv
+- Contact: authenticcdmx@gmail.com · WeChat (QR on site).
+- Languages of the website: Chinese, Japanese, English, French. Communication with clients happens in English or Spanish.
+
+## Packages (USD, indicative)
+- City Walk — $120 / 2 hours, 1 location, 25 edited photos.
+- Half Day — $220 / 4 hours, 2-3 locations, 60 edited photos (low availability).
+- Full Day — $320 / full day, 100 edited photos, pyramids optional (currently sold out).
+
+## Shot types offered
+- Wide / full body with background (plano general)
+- Knees-up / american shot (plano americano)
+- Close portrait (retrato)
+- Candid / just have fun
+
+## Good to know (Mexico City for tourists)
+- Tourist areas are safe by day; use Uber at night. Safer with a local guide.
+- Not everything is spicy — salsa is served on the side.
+- Don't drink tap water; use bottled water.
+- Tipping 10-15% at restaurants.
+- Altitude 2,240 m (7,350 ft) — pace day one.
+
+## Pages
+- Chinese (default): %(s)s/
+- Japanese: %(s)s/ja/
+- English (US): %(s)s/en/
+- French: %(s)s/fr/
+- International English: %(s)s/intl/
+""" % {"s": SITE}
+    with open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8") as f:
+        f.write(llms)
+    print("wrote sitemap.xml + robots.txt + llms.txt")

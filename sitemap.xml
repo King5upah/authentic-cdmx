@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://authentic-cdmx.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://authentic-cdmx.com/ja/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://authentic-cdmx.com/en/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://authentic-cdmx.com/fr/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://authentic-cdmx.com/intl/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
