@@ -4,8 +4,17 @@
 Ejecutar: python build.py
 """
 import os
+import re
+import json
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+SITE = "https://authentic-cdmx.com"
+OG_IMG = SITE + "/img/og-image.jpg"
+OG_LOCALE = {"zh": "zh_CN", "en": "en_US", "fr": "fr_FR", "intl": "en_US"}
+
+
+def strip_tags(s):
+    return re.sub(r"<[^>]+>", "", s).replace("&amp;", "&").strip()
 
 CSS = r"""
   :root {
@@ -208,10 +217,63 @@ def render(lang, C):
         packs += '<div class="pack%s">%s<h3>%s</h3><div class="price">%s<small>%s</small><span class="usd">%s</span></div><ul>%s</ul>%s</div>' % (
             cls, badge, pk["name"], pk["price"], pk["unit"], pk["ref"], feats, btn)
 
+    canonical = SITE + LANG_PATH[lang]
     alts = "".join(
-        '<link rel="alternate" hreflang="%s" href="https://authentic-cdmx.com%s">' % (HREFLANG[l], LANG_PATH[l])
+        '<link rel="alternate" hreflang="%s" href="%s%s">' % (HREFLANG[l], SITE, LANG_PATH[l])
         for l in LANG_ORDER)
-    alts += '<link rel="alternate" hreflang="x-default" href="https://authentic-cdmx.com/">'
+    alts += '<link rel="alternate" hreflang="x-default" href="%s/">' % SITE
+
+    # --- structured data: ProfessionalService + FAQPage (desde mitos) ---
+    faq = {
+        "@context": "https://schema.org", "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": strip_tags(h4),
+             "acceptedAnswer": {"@type": "Answer", "text": strip_tags(p)}}
+            for _kind, _tag, h4, p in C["myths"]],
+    }
+    biz = {
+        "@context": "https://schema.org", "@type": "ProfessionalService",
+        "@id": SITE + "/#business", "name": "Authentic CDMX",
+        "image": OG_IMG, "url": canonical, "description": strip_tags(C["desc"]),
+        "areaServed": {"@type": "City", "name": "Mexico City"},
+        "address": {"@type": "PostalAddress", "addressLocality": "Ciudad de México", "addressRegion": "CDMX", "addressCountry": "MX"},
+        "geo": {"@type": "GeoCoordinates", "latitude": 19.4326, "longitude": -99.1332},
+        "priceRange": "$$", "email": "authenticcdmx@gmail.com",
+        "sameAs": ["https://instagram.com/rod0cv"],
+        "knowsLanguage": ["es", "en", "fr", "zh"],
+        "serviceType": "Travel and portrait photography, local guide",
+    }
+    jsonld = ('<script type="application/ld+json">%s</script>'
+              '<script type="application/ld+json">%s</script>') % (
+        json.dumps(biz, ensure_ascii=False), json.dumps(faq, ensure_ascii=False))
+
+    og_alt = "".join('<meta property="og:locale:alternate" content="%s">' % OG_LOCALE[l]
+                     for l in LANG_ORDER if l != lang)
+    seo = (
+        '<link rel="canonical" href="%(can)s">'
+        '<meta name="robots" content="index,follow,max-image-preview:large">'
+        '<meta name="theme-color" content="#EC1E79">'
+        '<meta name="author" content="Rodo">'
+        '<link rel="icon" href="/favicon.ico" sizes="any">'
+        '<link rel="icon" type="image/png" href="/favicon.png">'
+        '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'
+        '<meta property="og:type" content="website">'
+        '<meta property="og:site_name" content="Authentic CDMX">'
+        '<meta property="og:title" content="%(title)s">'
+        '<meta property="og:description" content="%(desc)s">'
+        '<meta property="og:url" content="%(can)s">'
+        '<meta property="og:image" content="%(og)s">'
+        '<meta property="og:image:width" content="1200">'
+        '<meta property="og:image:height" content="630">'
+        '<meta property="og:locale" content="%(loc)s">%(ogalt)s'
+        '<meta name="twitter:card" content="summary_large_image">'
+        '<meta name="twitter:title" content="%(title)s">'
+        '<meta name="twitter:description" content="%(desc)s">'
+        '<meta name="twitter:image" content="%(og)s">'
+        '%(jsonld)s'
+    ) % dict(can=canonical, title=C["title"], desc=C["desc"], og=OG_IMG,
+             loc=OG_LOCALE[lang], ogalt=og_alt, jsonld=jsonld)
+    alts = alts + seo
 
     html = """<!doctype html>
 <html lang="%(htmllang)s">
@@ -507,3 +569,17 @@ if __name__ == "__main__":
         with open(os.path.join(path, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
         print("wrote", lang, "->", os.path.join(path, "index.html"), len(html), "bytes")
+
+    # sitemap.xml (URLs simples; hreflang vive en <head>, no se duplica aquí)
+    urls = "".join(
+        '  <url><loc>%s%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>\n'
+        % (SITE, LANG_PATH[l], "1.0" if l == "zh" else "0.8") for l in LANG_ORDER)
+    sitemap = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+    with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write(sitemap)
+    # robots.txt
+    robots = "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE
+    with open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8") as f:
+        f.write(robots)
+    print("wrote sitemap.xml + robots.txt")
