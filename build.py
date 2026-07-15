@@ -91,6 +91,17 @@ CSS = r"""
   .card p{margin:10px 0 0;color:var(--ink-soft);font-size:15px;}
   .card.soft{border-color:var(--verde);}
   .card.soft .zh-sub{color:var(--verde);}
+  .food-intro{max-width:64ch;font-size:19px;color:var(--ink-soft);margin:0 0 8px;}
+  .food-intro b{color:var(--ink);}
+  .tacos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:34px 0 10px;}
+  @media (max-width:820px){ .tacos{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .tacos{grid-template-columns:1fr;} }
+  .taco{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;}
+  .taco .when{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.03em;padding:4px 11px;border-radius:100px;margin-bottom:10px;background:color-mix(in srgb,var(--amarillo) 22%,var(--card));color:var(--ink);}
+  .taco h4{margin:0;font-family:var(--serif);font-size:22px;}
+  .taco .es{color:var(--verde);font-weight:700;font-size:12px;letter-spacing:.03em;}
+  .taco p{margin:8px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .food-more{font-family:var(--serif);font-size:24px;margin:44px 0 4px;}
   .food{display:grid;grid-template-columns:1fr 1fr;gap:6px 40px;}
   @media (max-width:640px){ .food{grid-template-columns:1fr;} }
   .dish{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);}
@@ -106,13 +117,13 @@ CSS = r"""
   .qa-card{break-inside:avoid;margin:0 0 20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px;}
   .msg{display:flex;gap:11px;align-items:flex-start;}
   .msg .av{width:36px;height:36px;border-radius:50%;flex:0 0 36px;display:grid;place-items:center;font-weight:800;font-size:15px;overflow:hidden;}
-  .msg-in .av{background:rgba(255,255,255,.16);color:#fff;}
+  .msg-in .av{background:#2f6fed;color:#fff;}
   .msg-out .av{background:var(--rosa);color:#fff;}
   .msg .col{display:flex;flex-direction:column;min-width:0;flex:1;}
   .msg .who{font-size:12px;font-weight:700;margin:0 0 4px;color:rgba(251,239,243,.55);}
   .msg .who .ok{color:#4fd1a5;}
   .msg .bubble{border-radius:14px;padding:11px 14px;font-size:15px;line-height:1.5;}
-  .msg-in .bubble{background:rgba(255,255,255,.08);color:rgba(251,239,243,.92);border-top-left-radius:4px;}
+  .msg-in .bubble{background:#2f6fed;color:#fff;border-top-left-radius:4px;}
   .msg-out{flex-direction:row-reverse;}
   .msg-out .col{align-items:flex-end;}
   .msg-out .who{text-align:right;color:rgba(255,255,255,.7);}
@@ -206,6 +217,10 @@ def render(lang, C):
         '<div class="dish"><div class="n">%02d</div><div><h4>%s <span class="es">%s</span></h4><p>%s</p></div></div>'
         % (i + 1, name, es, desc)
         for i, (name, es, desc) in enumerate(C["dishes"]))
+    tacos = "".join(
+        '<div class="taco"><span class="when">%s</span><h4>%s <span class="es">%s</span></h4><p>%s</p></div>'
+        % (when, name, es, desc)
+        for name, es, when, desc in C["tacos"])
     myths = "".join(
         '<div class="qa-card">'
         '<div class="msg msg-in"><div class="av">?</div><div class="col">'
@@ -345,7 +360,11 @@ def render(lang, C):
 <section id="comida"><div class="wrap">
   <p class="eyebrow">%(food_eyebrow)s</p>
   <div class="shead"><h2>%(food_h2)s</h2><span class="es-tag">%(food_tag)s</span></div>
+  <p class="food-intro">%(food_intro)s</p>
+  <div class="tacos">%(tacos)s</div>
+  <h3 class="food-more">%(food_more)s</h3>
   <div class="food">%(dishes)s</div>
+  <p class="note">%(food_corn)s</p>
 </div></section>
 <section id="mitos" class="myth-band"><div class="wrap">
   <p class="eyebrow">%(myth_eyebrow)s</p>
@@ -386,6 +405,7 @@ def render(lang, C):
         port_eyebrow=C["port_eyebrow"], port_h2=C["port_h2"], port_tag=C["port_tag"], gallery=gallery,
         spot_eyebrow=C["spot_eyebrow"], spot_h2=C["spot_h2"], spot_tag=C["spot_tag"], spots=spots, spot_note=C["spot_note"],
         food_eyebrow=C["food_eyebrow"], food_h2=C["food_h2"], food_tag=C["food_tag"], dishes=dishes,
+        food_intro=C["food_intro"], tacos=tacos, food_more=C["food_more"], food_corn=C["food_corn"],
         myth_eyebrow=C["myth_eyebrow"], myth_h2=C["myth_h2"], myths=myths,
         pack_eyebrow=C["pack_eyebrow"], pack_h2=C["pack_h2"], pack_tag=C["pack_tag"], packs=packs, pack_note=C["pack_note"],
         plano_eyebrow=C["plano_eyebrow"], plano_h2=C["plano_h2"], plano_tag=C["plano_tag"], plano_lede=C["plano_lede"], planos=planos,
@@ -423,14 +443,23 @@ LANGS["zh"] = {
    ("vocho.jpg","ICONOS · 城市符号","甲壳虫 & 城市符号","老 Vocho、棕榈树、复古招牌。这些细节才是墨西哥城的灵魂，明信片上没有。",False),
    ("skyline-sunset.jpg","ROOFTOP · 天台日落","天台看日落","想要大片天际线？我知道几个能上去的天台，日落 golden hour 一组，绝了。",False)],
  "spot_note":"🗺️ 想去金字塔（Teotihuacán）、霍奇米尔科、Roma/Condesa 打卡？都能安排。但想要别人没有的照片 —— 上面那些冷门点才是重点。",
- "food_eyebrow":"Qué comer · 吃什么","food_h2":"墨西哥必吃 &<br>中餐去哪里","food_tag":"Sabores",
+ "food_eyebrow":"Qué comer · 吃什么","food_h2":"塔可不是一道菜，<br>是一整套文化","food_tag":"Sabores",
+ "food_intro":"在墨西哥，<b>塔可 taco 不是「一道菜」，是一种「形式」</b> —— 像寿司一样多样，像面包、像奶酪一样千变万化。而<b>玉米 maíz，在墨西哥就是文化本身</b>。而且不是什么都能随时吃：barbacoa 和 carnitas 是周末早上的仪式，pastor 是夜宵。",
+ "tacos":[
+   ("Al pastor","牧羊人","🌙 夜宵","立式烤炉的 adobo 腌猪肉 + 菠萝。夜晚之王，配香菜洋葱。"),
+   ("Canasta / al vapor","篮子塔可","🌅 早上","自行车叫卖的蒸软塔可，便宜又家常。土豆、豆泥、猪皮。"),
+   ("Guisado","炖菜","☀️ 中午","大锅炖：tinga 鸡肉、rajas 辣椒、chicharrón 猪皮。家常午餐。"),
+   ("Carnitas","脆皮猪","🌅 周末上午","米却肯式慢炖炸猪肉，各个部位都有。周末早晨的仪式。"),
+   ("Barbacoa","蒸羊肉","🌅 周末上午","龙舌兰叶包蒸的羊肉，配 consomé 汤。周末限定，去晚就卖光。"),
+   ("Cochinita pibil","尤卡坦","🍊 特色","achiote 红酱慢烤猪肉，尤卡坦名物，配腌紫洋葱。")],
+ "food_more":"塔可之外",
  "dishes":[
-   ("Tacos al pastor","牧羊人塔可","竖烤猪肉 + 菠萝，玉米饼卷着吃。<span class=\"chili\">微辣，可说「sin picante」不辣。</span>"),
-   ("Birria","红烧羊肉汤 taco","慢炖羊/牛肉，蘸汤吃。中国胃很容易接受，我带你去本地人排队的摊。"),
    ("Mole","莫雷酱","巧克力+辣椒+香料的酱，浇在鸡肉上。味道复杂，普埃布拉名菜。"),
-   ("Elote / Esquite","墨西哥烤玉米","玉米抹蛋黄酱、芝士粉、辣椒粉、青柠。街头小吃之王。"),
+   ("Elote / Esquite","墨西哥烤玉米","玉米抹蛋黄酱、芝士粉、辣椒粉、青柠。街头小吃之王，玉米文化的日常。"),
+   ("Tamal","玉米粽","玉米面裹馅，用玉米叶或香蕉叶蒸熟。早餐配 atole 热饮。"),
    ("Barrio Chino","唐人街","<span class=\"chili\">先说清楚：这里的「中餐」是墨西哥化的，别期待家乡味。</span>但拍照氛围很好。"),
    ("正宗中餐","Auténtico","想吃地道川菜/粤菜？我带你去本地华人真正吃的馆子，不踩雷。")],
+ "food_corn":"🌽 玉米在墨西哥不只是食物 —— 从塔可、tamal 到 atole，几千年的文明都建立在玉米上。吃一个塔可，就是在吃这座城市的历史。",
  "myth_eyebrow":"Mitos y verdades · 谣言粉碎机","myth_h2":"你私信问我的，<br>我一条条回你",
  "anon_label":"匿名 · 游客","me_label":"Rodo · Authentic CDMX",
  "myths":[
@@ -481,14 +510,23 @@ LANGS["en"] = {
    ("vocho.jpg","ICONOS · city symbols","Vochos & city icons","Old VW Beetles, palm trees, retro signage. The details are the soul of this city — never on a postcard.",False),
    ("skyline-sunset.jpg","ROOFTOP · sunset","Rooftop golden hour","Want the big skyline? I know a few rooftops you can actually get onto. One golden-hour set and it's a wrap.",False)],
  "spot_note":"🗺️ Want Teotihuacán pyramids, Xochimilco, or the Roma/Condesa checklist? All doable. But if you want photos nobody else has, the off-map spots above are the point.",
- "food_eyebrow":"What to eat","food_h2":"Must-eat Mexican &<br>where to find real Chinese","food_tag":"Sabores",
+ "food_eyebrow":"What to eat","food_h2":"A taco isn't a dish,<br>it's a whole culture","food_tag":"Sabores",
+ "food_intro":"In Mexico, <b>a taco isn't a dish — it's a format.</b> As varied as sushi, as bread, as cheese. And <b>corn (maíz) is culture itself.</b> Not everything is eaten anytime, either: barbacoa and carnitas are a weekend-morning ritual; al pastor is a late-night thing.",
+ "tacos":[
+   ("Al pastor","spit-roast pork","🌙 Night","Adobo-marinated pork off a vertical trompo + pineapple. King of the night, with cilantro and onion."),
+   ("Canasta / steamed","basket tacos","🌅 Morning","Soft steamed tacos sold off a bicycle — cheap, homey. Potato, beans, chicharrón."),
+   ("Guisado","stew tacos","☀️ Midday","Straight from the pot: tinga, rajas, chicharrón. The everyday lunch taco."),
+   ("Carnitas","confit pork","🌅 Weekend AM","Michoacán-style slow-cooked pork, every cut. A weekend-morning ritual."),
+   ("Barbacoa","steamed lamb","🌅 Weekend AM","Agave-leaf steamed lamb with consomé broth. Weekends only — go early or it's gone."),
+   ("Cochinita pibil","Yucatán","🍊 Specialty","Achiote-marinated slow-roast pork from Yucatán, with pickled red onion.")],
+ "food_more":"Beyond the taco",
  "dishes":[
-   ("Tacos al pastor","spit-roast pork","Marinated pork + pineapple in a corn tortilla. <span class=\"chili\">Mild — say “sin picante” for no heat.</span>"),
-   ("Birria","stewed meat + broth","Slow-cooked goat/beef taco you dip in broth. Easy on any palate — I'll take you to the stall locals line up for."),
    ("Mole","chili-chocolate sauce","Chili + chocolate + spices over chicken. Complex, iconic Puebla dish."),
-   ("Elote / Esquite","Mexican street corn","Corn with mayo, cheese, chili powder, lime. King of street snacks."),
+   ("Elote / Esquite","Mexican street corn","Corn with mayo, cheese, chili powder, lime. King of street snacks — everyday corn culture."),
+   ("Tamal","steamed corn parcel","Corn dough with a filling, steamed in a husk or banana leaf. Breakfast, with a warm atole."),
    ("Barrio Chino","Chinatown","<span class=\"chili\">Heads up: the “Chinese” food here is Mexican-ized — don't expect the real thing.</span> Great photo vibe though."),
    ("Real Chinese","Auténtico","Craving proper Sichuan/Cantonese? I'll take you where the local Chinese community actually eats.")],
+ "food_corn":"🌽 Corn in Mexico isn't just food — from tacos to tamales to atole, thousands of years of civilization are built on it. Eating a taco is eating the city's history.",
  "myth_eyebrow":"Myths & truths","myth_h2":"The stuff you DM me —<br>answered, one by one",
  "anon_label":"Anonymous · traveler","me_label":"Rodo · Authentic CDMX",
  "myths":[
@@ -540,14 +578,23 @@ LANGS["fr"].update({
    ("vocho.jpg","ICONOS · symboles","Vochos & symboles de la ville","Vieilles Coccinelles VW, palmiers, enseignes rétro. Les détails sont l'âme de cette ville — jamais sur une carte postale.",False),
    ("skyline-sunset.jpg","ROOFTOP · coucher de soleil","Toits à l'heure dorée","Envie du grand panorama urbain ? Je connais des toits accessibles. Une série à l'heure dorée et c'est plié.",False)],
  "spot_note":"🗺️ Envie des pyramides de Teotihuacán, de Xochimilco ou de la checklist Roma/Condesa ? Tout est possible. Mais pour des photos que personne d'autre n'a, les lieux hors des sentiers ci-dessus sont l'essentiel.",
- "food_eyebrow":"Quoi manger","food_h2":"Mexicain incontournable &<br>où trouver du vrai chinois","food_tag":"Sabores",
+ "food_eyebrow":"Quoi manger","food_h2":"Le taco n'est pas un plat,<br>c'est toute une culture","food_tag":"Sabores",
+ "food_intro":"Au Mexique, <b>le taco n'est pas un plat — c'est un format.</b> Aussi varié que le sushi, que le pain, que les fromages. Et <b>le maïs (maíz), c'est la culture elle-même.</b> On ne mange pas tout à toute heure : la barbacoa et les carnitas sont un rituel du week-end matin ; l'al pastor se mange le soir.",
+ "tacos":[
+   ("Al pastor","porc à la broche","🌙 Soir","Porc mariné à l'adobo sur trompo vertical + ananas. Le roi de la nuit, coriandre et oignon."),
+   ("Canasta / vapeur","tacos panier","🌅 Matin","Tacos vapeur moelleux vendus à vélo — bon marché, familial. Pomme de terre, haricots, chicharrón."),
+   ("Guisado","mijoté","☀️ Midi","Tout droit de la marmite : tinga, rajas, chicharrón. Le taco du déjeuner de tous les jours."),
+   ("Carnitas","porc confit","🌅 Week-end matin","Porc mijoté à la façon du Michoacán, tous les morceaux. Un rituel du week-end."),
+   ("Barbacoa","agneau vapeur","🌅 Week-end matin","Agneau cuit vapeur en feuilles d'agave, avec consomé. Le week-end seulement — arrivez tôt."),
+   ("Cochinita pibil","Yucatán","🍊 Spécialité","Porc mariné à l'achiote rôti lentement, du Yucatán, avec oignon rouge mariné.")],
+ "food_more":"Au-delà du taco",
  "dishes":[
-   ("Tacos al pastor","porc rôti à la broche","Porc mariné + ananas dans une tortilla de maïs. <span class=\"chili\">Doux — dites « sin picante » pour zéro piquant.</span>"),
-   ("Birria","viande mijotée + bouillon","Taco de chèvre/bœuf mijoté qu'on trempe dans le bouillon. Facile pour tous — je vous emmène au stand où les locaux font la queue."),
    ("Mole","sauce piment-chocolat","Piment + chocolat + épices sur du poulet. Complexe, plat emblématique de Puebla."),
-   ("Elote / Esquite","maïs de rue mexicain","Maïs avec mayo, fromage, piment en poudre, citron vert. Le roi du snack de rue."),
+   ("Elote / Esquite","maïs de rue","Maïs avec mayo, fromage, piment en poudre, citron vert. Le roi du snack — la culture du maïs au quotidien."),
+   ("Tamal","pâte de maïs vapeur","Pâte de maïs farcie, cuite vapeur dans une feuille. Petit-déjeuner, avec un atole chaud."),
    ("Barrio Chino","quartier chinois","<span class=\"chili\">Attention : la cuisine « chinoise » ici est mexicanisée — n'attendez pas l'authentique.</span> Mais l'ambiance photo est top."),
    ("Vrai chinois","Auténtico","Envie de vrai sichuanais/cantonais ? Je vous emmène là où la communauté chinoise locale mange vraiment.")],
+ "food_corn":"🌽 Au Mexique, le maïs n'est pas qu'un aliment — du taco au tamal en passant par l'atole, des milliers d'années de civilisation reposent dessus. Manger un taco, c'est manger l'histoire de la ville.",
  "myth_eyebrow":"Mythes & vérités","myth_h2":"Ce que vous me demandez en DM —<br>je réponds, une par une",
  "anon_label":"Anonyme · voyageur","me_label":"Rodo · Authentic CDMX",
  "myths":[
@@ -614,14 +661,23 @@ LANGS["ja"].update({
    ("vocho.jpg","ICONOS · 街の象徴","Vocho と街の象徴","古いVWビートル、ヤシの木、レトロな看板。細部こそこの街の魂 — 絵はがきには写らない。",False),
    ("skyline-sunset.jpg","ROOFTOP · 夕日","屋上のゴールデンアワー","大きなスカイラインが欲しい？登れる屋上をいくつか知っています。夕日の一連で完璧に。",False)],
  "spot_note":"🗺️ テオティワカン遺跡、ソチミルコ、Roma/Condesa の定番も手配できます。でも誰も持っていない写真が欲しいなら、上の穴場こそが本命です。",
- "food_eyebrow":"何を食べる","food_h2":"必食のメキシコ料理 &<br>本場の中華はどこで","food_tag":"Sabores",
+ "food_eyebrow":"何を食べる","food_h2":"タコスは一皿の料理ではない、<br>ひとつの文化","food_tag":"Sabores",
+ "food_intro":"メキシコでは、<b>タコスは「料理」ではなく「形式」です。</b>寿司のように、パンのように、チーズのように多彩。そして<b>トウモロコシ（maíz）はまさに文化そのもの。</b>何でもいつでも食べられるわけではありません：バルバコアやカルニータスは週末の朝の儀式、アル・パストールは夜の食べ物です。",
+ "tacos":[
+   ("Al pastor","串焼き豚","🌙 夜","縦型ローストのアドボ漬け豚 + パイナップル。夜の王様、パクチーと玉ねぎで。"),
+   ("Canasta / 蒸し","バスケット","🌅 朝","自転車で売られる蒸しタコス — 安くて家庭的。じゃがいも、豆、チチャロン。"),
+   ("Guisado","煮込み","☀️ 昼","鍋からそのまま：ティンガ、ラハス、チチャロン。日常のランチタコス。"),
+   ("Carnitas","豚のコンフィ","🌅 週末の朝","ミチョアカン風の煮込み豚、あらゆる部位。週末の朝の儀式。"),
+   ("Barbacoa","蒸し羊","🌅 週末の朝","アガベの葉で蒸した羊肉、コンソメ添え。週末限定 — 早く行かないと売り切れ。"),
+   ("Cochinita pibil","ユカタン","🍊 名物","アチョーテ漬けの豚の低温ロースト、ユカタン名物、赤玉ねぎのピクルスと。")],
+ "food_more":"タコスの先へ",
  "dishes":[
-   ("Tacos al pastor","串焼き豚のタコス","マリネした豚肉 + パイナップルをトルティーヤで。<span class=\"chili\">辛さは控えめ、「sin picante」で辛さ抜き。</span>"),
-   ("Birria","煮込み肉 + スープ","じっくり煮た山羊/牛肉を、スープに浸して食べるタコス。誰でも食べやすい — 地元民が並ぶ屋台へ案内します。"),
    ("Mole","唐辛子チョコソース","唐辛子 + チョコ + スパイスのソースを鶏肉に。複雑な味、プエブラの名物。"),
-   ("Elote / Esquite","メキシコ流焼きトウモロコシ","トウモロコシにマヨ、チーズ、唐辛子粉、ライム。屋台スナックの王様。"),
+   ("Elote / Esquite","メキシコ流焼きトウモロコシ","トウモロコシにマヨ、チーズ、唐辛子粉、ライム。屋台スナックの王様 — 日常のトウモロコシ文化。"),
+   ("Tamal","トウモロコシ生地の蒸し","具入りのトウモロコシ生地を皮で包んで蒸す。朝食に温かいアトーレと。"),
    ("Barrio Chino","中華街","<span class=\"chili\">先に言うと、ここの「中華」はメキシコ風 — 本場の味は期待しないで。</span>でも写真の雰囲気は最高。"),
    ("本場の中華","Auténtico","本格的な四川/広東料理が食べたい？地元の華人が実際に通う店へ案内します。")],
+ "food_corn":"🌽 メキシコでトウモロコシは単なる食べ物ではありません — タコス、タマル、アトーレまで、数千年の文明がその上に築かれています。タコスを食べることは、この街の歴史を食べること。",
  "myth_eyebrow":"Mitos y verdades · 誤解と真実","myth_h2":"DMで届く質問に、<br>ひとつずつ答えます",
  "anon_label":"匿名 · 旅行者","me_label":"Rodo · Authentic CDMX",
  "myths":[

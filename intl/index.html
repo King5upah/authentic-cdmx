@@ -81,6 +81,17 @@
   .card p{margin:10px 0 0;color:var(--ink-soft);font-size:15px;}
   .card.soft{border-color:var(--verde);}
   .card.soft .zh-sub{color:var(--verde);}
+  .food-intro{max-width:64ch;font-size:19px;color:var(--ink-soft);margin:0 0 8px;}
+  .food-intro b{color:var(--ink);}
+  .tacos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:34px 0 10px;}
+  @media (max-width:820px){ .tacos{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .tacos{grid-template-columns:1fr;} }
+  .taco{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;}
+  .taco .when{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.03em;padding:4px 11px;border-radius:100px;margin-bottom:10px;background:color-mix(in srgb,var(--amarillo) 22%,var(--card));color:var(--ink);}
+  .taco h4{margin:0;font-family:var(--serif);font-size:22px;}
+  .taco .es{color:var(--verde);font-weight:700;font-size:12px;letter-spacing:.03em;}
+  .taco p{margin:8px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .food-more{font-family:var(--serif);font-size:24px;margin:44px 0 4px;}
   .food{display:grid;grid-template-columns:1fr 1fr;gap:6px 40px;}
   @media (max-width:640px){ .food{grid-template-columns:1fr;} }
   .dish{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);}
@@ -96,13 +107,13 @@
   .qa-card{break-inside:avoid;margin:0 0 20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px;}
   .msg{display:flex;gap:11px;align-items:flex-start;}
   .msg .av{width:36px;height:36px;border-radius:50%;flex:0 0 36px;display:grid;place-items:center;font-weight:800;font-size:15px;overflow:hidden;}
-  .msg-in .av{background:rgba(255,255,255,.16);color:#fff;}
+  .msg-in .av{background:#2f6fed;color:#fff;}
   .msg-out .av{background:var(--rosa);color:#fff;}
   .msg .col{display:flex;flex-direction:column;min-width:0;flex:1;}
   .msg .who{font-size:12px;font-weight:700;margin:0 0 4px;color:rgba(251,239,243,.55);}
   .msg .who .ok{color:#4fd1a5;}
   .msg .bubble{border-radius:14px;padding:11px 14px;font-size:15px;line-height:1.5;}
-  .msg-in .bubble{background:rgba(255,255,255,.08);color:rgba(251,239,243,.92);border-top-left-radius:4px;}
+  .msg-in .bubble{background:#2f6fed;color:#fff;border-top-left-radius:4px;}
   .msg-out{flex-direction:row-reverse;}
   .msg-out .col{align-items:flex-end;}
   .msg-out .who{text-align:right;color:rgba(255,255,255,.7);}
@@ -187,8 +198,12 @@
 </div></section>
 <section id="comida"><div class="wrap">
   <p class="eyebrow">What to eat</p>
-  <div class="shead"><h2>Must-eat Mexican &<br>where to find real Chinese</h2><span class="es-tag">Sabores</span></div>
-  <div class="food"><div class="dish"><div class="n">01</div><div><h4>Tacos al pastor <span class="es">spit-roast pork</span></h4><p>Marinated pork + pineapple in a corn tortilla. <span class="chili">Mild — say “sin picante” for no heat.</span></p></div></div><div class="dish"><div class="n">02</div><div><h4>Birria <span class="es">stewed meat + broth</span></h4><p>Slow-cooked goat/beef taco you dip in broth. Easy on any palate — I'll take you to the stall locals line up for.</p></div></div><div class="dish"><div class="n">03</div><div><h4>Mole <span class="es">chili-chocolate sauce</span></h4><p>Chili + chocolate + spices over chicken. Complex, iconic Puebla dish.</p></div></div><div class="dish"><div class="n">04</div><div><h4>Elote / Esquite <span class="es">Mexican street corn</span></h4><p>Corn with mayo, cheese, chili powder, lime. King of street snacks.</p></div></div><div class="dish"><div class="n">05</div><div><h4>Barrio Chino <span class="es">Chinatown</span></h4><p><span class="chili">Heads up: the “Chinese” food here is Mexican-ized — don't expect the real thing.</span> Great photo vibe though.</p></div></div><div class="dish"><div class="n">06</div><div><h4>Real Chinese <span class="es">Auténtico</span></h4><p>Craving proper Sichuan/Cantonese? I'll take you where the local Chinese community actually eats.</p></div></div></div>
+  <div class="shead"><h2>A taco isn't a dish,<br>it's a whole culture</h2><span class="es-tag">Sabores</span></div>
+  <p class="food-intro">In Mexico, <b>a taco isn't a dish — it's a format.</b> As varied as sushi, as bread, as cheese. And <b>corn (maíz) is culture itself.</b> Not everything is eaten anytime, either: barbacoa and carnitas are a weekend-morning ritual; al pastor is a late-night thing.</p>
+  <div class="tacos"><div class="taco"><span class="when">🌙 Night</span><h4>Al pastor <span class="es">spit-roast pork</span></h4><p>Adobo-marinated pork off a vertical trompo + pineapple. King of the night, with cilantro and onion.</p></div><div class="taco"><span class="when">🌅 Morning</span><h4>Canasta / steamed <span class="es">basket tacos</span></h4><p>Soft steamed tacos sold off a bicycle — cheap, homey. Potato, beans, chicharrón.</p></div><div class="taco"><span class="when">☀️ Midday</span><h4>Guisado <span class="es">stew tacos</span></h4><p>Straight from the pot: tinga, rajas, chicharrón. The everyday lunch taco.</p></div><div class="taco"><span class="when">🌅 Weekend AM</span><h4>Carnitas <span class="es">confit pork</span></h4><p>Michoacán-style slow-cooked pork, every cut. A weekend-morning ritual.</p></div><div class="taco"><span class="when">🌅 Weekend AM</span><h4>Barbacoa <span class="es">steamed lamb</span></h4><p>Agave-leaf steamed lamb with consomé broth. Weekends only — go early or it's gone.</p></div><div class="taco"><span class="when">🍊 Specialty</span><h4>Cochinita pibil <span class="es">Yucatán</span></h4><p>Achiote-marinated slow-roast pork from Yucatán, with pickled red onion.</p></div></div>
+  <h3 class="food-more">Beyond the taco</h3>
+  <div class="food"><div class="dish"><div class="n">01</div><div><h4>Mole <span class="es">chili-chocolate sauce</span></h4><p>Chili + chocolate + spices over chicken. Complex, iconic Puebla dish.</p></div></div><div class="dish"><div class="n">02</div><div><h4>Elote / Esquite <span class="es">Mexican street corn</span></h4><p>Corn with mayo, cheese, chili powder, lime. King of street snacks — everyday corn culture.</p></div></div><div class="dish"><div class="n">03</div><div><h4>Tamal <span class="es">steamed corn parcel</span></h4><p>Corn dough with a filling, steamed in a husk or banana leaf. Breakfast, with a warm atole.</p></div></div><div class="dish"><div class="n">04</div><div><h4>Barrio Chino <span class="es">Chinatown</span></h4><p><span class="chili">Heads up: the “Chinese” food here is Mexican-ized — don't expect the real thing.</span> Great photo vibe though.</p></div></div><div class="dish"><div class="n">05</div><div><h4>Real Chinese <span class="es">Auténtico</span></h4><p>Craving proper Sichuan/Cantonese? I'll take you where the local Chinese community actually eats.</p></div></div></div>
+  <p class="note">🌽 Corn in Mexico isn't just food — from tacos to tamales to atole, thousands of years of civilization are built on it. Eating a taco is eating the city's history.</p>
 </div></section>
 <section id="mitos" class="myth-band"><div class="wrap">
   <p class="eyebrow">Myths & truths</p>

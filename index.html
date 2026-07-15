@@ -81,6 +81,17 @@
   .card p{margin:10px 0 0;color:var(--ink-soft);font-size:15px;}
   .card.soft{border-color:var(--verde);}
   .card.soft .zh-sub{color:var(--verde);}
+  .food-intro{max-width:64ch;font-size:19px;color:var(--ink-soft);margin:0 0 8px;}
+  .food-intro b{color:var(--ink);}
+  .tacos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:34px 0 10px;}
+  @media (max-width:820px){ .tacos{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .tacos{grid-template-columns:1fr;} }
+  .taco{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 20px;}
+  .taco .when{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.03em;padding:4px 11px;border-radius:100px;margin-bottom:10px;background:color-mix(in srgb,var(--amarillo) 22%,var(--card));color:var(--ink);}
+  .taco h4{margin:0;font-family:var(--serif);font-size:22px;}
+  .taco .es{color:var(--verde);font-weight:700;font-size:12px;letter-spacing:.03em;}
+  .taco p{margin:8px 0 0;font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .food-more{font-family:var(--serif);font-size:24px;margin:44px 0 4px;}
   .food{display:grid;grid-template-columns:1fr 1fr;gap:6px 40px;}
   @media (max-width:640px){ .food{grid-template-columns:1fr;} }
   .dish{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);}
@@ -96,13 +107,13 @@
   .qa-card{break-inside:avoid;margin:0 0 20px;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:12px;}
   .msg{display:flex;gap:11px;align-items:flex-start;}
   .msg .av{width:36px;height:36px;border-radius:50%;flex:0 0 36px;display:grid;place-items:center;font-weight:800;font-size:15px;overflow:hidden;}
-  .msg-in .av{background:rgba(255,255,255,.16);color:#fff;}
+  .msg-in .av{background:#2f6fed;color:#fff;}
   .msg-out .av{background:var(--rosa);color:#fff;}
   .msg .col{display:flex;flex-direction:column;min-width:0;flex:1;}
   .msg .who{font-size:12px;font-weight:700;margin:0 0 4px;color:rgba(251,239,243,.55);}
   .msg .who .ok{color:#4fd1a5;}
   .msg .bubble{border-radius:14px;padding:11px 14px;font-size:15px;line-height:1.5;}
-  .msg-in .bubble{background:rgba(255,255,255,.08);color:rgba(251,239,243,.92);border-top-left-radius:4px;}
+  .msg-in .bubble{background:#2f6fed;color:#fff;border-top-left-radius:4px;}
   .msg-out{flex-direction:row-reverse;}
   .msg-out .col{align-items:flex-end;}
   .msg-out .who{text-align:right;color:rgba(255,255,255,.7);}
@@ -187,8 +198,12 @@
 </div></section>
 <section id="comida"><div class="wrap">
   <p class="eyebrow">Qué comer · 吃什么</p>
-  <div class="shead"><h2>墨西哥必吃 &<br>中餐去哪里</h2><span class="es-tag">Sabores</span></div>
-  <div class="food"><div class="dish"><div class="n">01</div><div><h4>Tacos al pastor <span class="es">牧羊人塔可</span></h4><p>竖烤猪肉 + 菠萝，玉米饼卷着吃。<span class="chili">微辣，可说「sin picante」不辣。</span></p></div></div><div class="dish"><div class="n">02</div><div><h4>Birria <span class="es">红烧羊肉汤 taco</span></h4><p>慢炖羊/牛肉，蘸汤吃。中国胃很容易接受，我带你去本地人排队的摊。</p></div></div><div class="dish"><div class="n">03</div><div><h4>Mole <span class="es">莫雷酱</span></h4><p>巧克力+辣椒+香料的酱，浇在鸡肉上。味道复杂，普埃布拉名菜。</p></div></div><div class="dish"><div class="n">04</div><div><h4>Elote / Esquite <span class="es">墨西哥烤玉米</span></h4><p>玉米抹蛋黄酱、芝士粉、辣椒粉、青柠。街头小吃之王。</p></div></div><div class="dish"><div class="n">05</div><div><h4>Barrio Chino <span class="es">唐人街</span></h4><p><span class="chili">先说清楚：这里的「中餐」是墨西哥化的，别期待家乡味。</span>但拍照氛围很好。</p></div></div><div class="dish"><div class="n">06</div><div><h4>正宗中餐 <span class="es">Auténtico</span></h4><p>想吃地道川菜/粤菜？我带你去本地华人真正吃的馆子，不踩雷。</p></div></div></div>
+  <div class="shead"><h2>塔可不是一道菜，<br>是一整套文化</h2><span class="es-tag">Sabores</span></div>
+  <p class="food-intro">在墨西哥，<b>塔可 taco 不是「一道菜」，是一种「形式」</b> —— 像寿司一样多样，像面包、像奶酪一样千变万化。而<b>玉米 maíz，在墨西哥就是文化本身</b>。而且不是什么都能随时吃：barbacoa 和 carnitas 是周末早上的仪式，pastor 是夜宵。</p>
+  <div class="tacos"><div class="taco"><span class="when">🌙 夜宵</span><h4>Al pastor <span class="es">牧羊人</span></h4><p>立式烤炉的 adobo 腌猪肉 + 菠萝。夜晚之王，配香菜洋葱。</p></div><div class="taco"><span class="when">🌅 早上</span><h4>Canasta / al vapor <span class="es">篮子塔可</span></h4><p>自行车叫卖的蒸软塔可，便宜又家常。土豆、豆泥、猪皮。</p></div><div class="taco"><span class="when">☀️ 中午</span><h4>Guisado <span class="es">炖菜</span></h4><p>大锅炖：tinga 鸡肉、rajas 辣椒、chicharrón 猪皮。家常午餐。</p></div><div class="taco"><span class="when">🌅 周末上午</span><h4>Carnitas <span class="es">脆皮猪</span></h4><p>米却肯式慢炖炸猪肉，各个部位都有。周末早晨的仪式。</p></div><div class="taco"><span class="when">🌅 周末上午</span><h4>Barbacoa <span class="es">蒸羊肉</span></h4><p>龙舌兰叶包蒸的羊肉，配 consomé 汤。周末限定，去晚就卖光。</p></div><div class="taco"><span class="when">🍊 特色</span><h4>Cochinita pibil <span class="es">尤卡坦</span></h4><p>achiote 红酱慢烤猪肉，尤卡坦名物，配腌紫洋葱。</p></div></div>
+  <h3 class="food-more">塔可之外</h3>
+  <div class="food"><div class="dish"><div class="n">01</div><div><h4>Mole <span class="es">莫雷酱</span></h4><p>巧克力+辣椒+香料的酱，浇在鸡肉上。味道复杂，普埃布拉名菜。</p></div></div><div class="dish"><div class="n">02</div><div><h4>Elote / Esquite <span class="es">墨西哥烤玉米</span></h4><p>玉米抹蛋黄酱、芝士粉、辣椒粉、青柠。街头小吃之王，玉米文化的日常。</p></div></div><div class="dish"><div class="n">03</div><div><h4>Tamal <span class="es">玉米粽</span></h4><p>玉米面裹馅，用玉米叶或香蕉叶蒸熟。早餐配 atole 热饮。</p></div></div><div class="dish"><div class="n">04</div><div><h4>Barrio Chino <span class="es">唐人街</span></h4><p><span class="chili">先说清楚：这里的「中餐」是墨西哥化的，别期待家乡味。</span>但拍照氛围很好。</p></div></div><div class="dish"><div class="n">05</div><div><h4>正宗中餐 <span class="es">Auténtico</span></h4><p>想吃地道川菜/粤菜？我带你去本地华人真正吃的馆子，不踩雷。</p></div></div></div>
+  <p class="note">🌽 玉米在墨西哥不只是食物 —— 从塔可、tamal 到 atole，几千年的文明都建立在玉米上。吃一个塔可，就是在吃这座城市的历史。</p>
 </div></section>
 <section id="mitos" class="myth-band"><div class="wrap">
   <p class="eyebrow">Mitos y verdades · 谣言粉碎机</p>
