@@ -75,7 +75,7 @@ CSS = r"""
   .shead .es-tag{font-family:var(--serif);font-style:italic;color:var(--rosa);font-size:20px;white-space:nowrap;}
   .gallery{columns:3 260px;column-gap:14px;}
   .gallery figure{margin:0 0 14px;break-inside:avoid;border-radius:12px;overflow:hidden;position:relative;}
-  .gallery img{width:100%;transition:transform .4s ease;}
+  .gallery img{width:100%;height:auto;display:block;transition:transform .4s ease;}
   .gallery figure:hover img{transform:scale(1.04);}
   .gallery figcaption{position:absolute;left:10px;bottom:8px;color:#fff;font-size:12px;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,.7);opacity:0;transition:opacity .25s;}
   .gallery figure:hover figcaption{opacity:1;}
@@ -207,11 +207,11 @@ def langbar(cur):
 def render(lang, C):
     nav = "".join('<a href="#%s">%s</a>' % (k, v) for k, v in C["nav"])
     gallery = "".join(
-        '<figure><img src="/img/%s" alt="%s" loading="lazy"><figcaption>%s</figcaption></figure>' % (img, cap, cap)
+        '<figure><img src="/img/%s" alt="%s"%s loading="lazy" decoding="async"><figcaption>%s</figcaption></figure>' % (img, cap, wh(img), cap)
         for img, cap in C["gallery"])
     spots = "".join(
-        '<div class="card%s"><div class="thumb"><img src="/img/%s" alt="%s" loading="lazy"></div><div class="body"><span class="zh-sub">%s</span><h3>%s</h3><p>%s</p></div></div>'
-        % ((" soft" if soft else ""), img, h3, sub, h3, p)
+        '<div class="card%s"><div class="thumb"><img src="/img/%s" alt="%s"%s loading="lazy" decoding="async"></div><div class="body"><span class="zh-sub">%s</span><h3>%s</h3><p>%s</p></div></div>'
+        % ((" soft" if soft else ""), img, h3, wh(img), sub, h3, p)
         for img, sub, h3, p, soft in C["spots"])
     dishes = "".join(
         '<div class="dish"><div class="n">%02d</div><div><h4>%s <span class="es">%s</span></h4><p>%s</p></div></div>'
@@ -252,8 +252,24 @@ def render(lang, C):
     alts += '<link rel="alternate" hreflang="x-default" href="%s/">' % SITE
 
     # --- structured data: ProfessionalService + FAQPage (desde mitos) ---
+    site_schema = {
+        "@context": "https://schema.org", "@type": "WebSite",
+        "@id": SITE + "/#website", "url": SITE + "/", "name": "Authentic CDMX",
+        "inLanguage": C["htmllang"],
+        "publisher": {"@id": SITE + "/#business"},
+    }
+    page_schema = {
+        "@context": "https://schema.org", "@type": "WebPage",
+        "@id": canonical + "#webpage", "url": canonical, "name": C["title"],
+        "description": strip_tags(C["desc"]), "inLanguage": C["htmllang"],
+        "isPartOf": {"@id": SITE + "/#website"},
+        "about": {"@id": SITE + "/#business"},
+        "primaryImageOfPage": {"@type": "ImageObject", "url": OG_IMG,
+                               "width": 1200, "height": 630},
+    }
     faq = {
         "@context": "https://schema.org", "@type": "FAQPage",
+        "inLanguage": C["htmllang"],
         "mainEntity": [
             {"@type": "Question", "name": strip_tags(q),
              "acceptedAnswer": {"@type": "Answer", "text": strip_tags(a)}}
@@ -281,9 +297,8 @@ def render(lang, C):
                      "sameAs": ["https://instagram.com/rod0cv"]},
         "makesOffer": offers,
     }
-    jsonld = ('<script type="application/ld+json">%s</script>'
-              '<script type="application/ld+json">%s</script>') % (
-        json.dumps(biz, ensure_ascii=False), json.dumps(faq, ensure_ascii=False))
+    jsonld = "".join('<script type="application/ld+json">%s</script>' % json.dumps(o, ensure_ascii=False)
+                     for o in (site_schema, biz, page_schema, faq))
 
     og_alt = "".join('<meta property="og:locale:alternate" content="%s">' % OG_LOCALE[l]
                      for l in LANG_ORDER if l != lang)
@@ -303,6 +318,8 @@ def render(lang, C):
         '<meta property="og:image" content="%(og)s">'
         '<meta property="og:image:width" content="1200">'
         '<meta property="og:image:height" content="630">'
+        '<meta property="og:image:alt" content="Authentic CDMX — Mexico City photography & guide">'
+        '<meta name="twitter:image:alt" content="Authentic CDMX — Mexico City photography & guide">'
         '<meta property="og:locale" content="%(loc)s">%(ogalt)s'
         '<meta name="twitter:card" content="summary_large_image">'
         '<meta name="twitter:title" content="%(title)s">'
@@ -320,6 +337,7 @@ def render(lang, C):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%(title)s</title>
 <meta name="description" content="%(desc)s">
+<link rel="preload" as="image" href="/img/hero-street.jpg" fetchpriority="high">
 %(alts)s
 <style>%(css)s</style>
 </head>
@@ -330,7 +348,7 @@ def render(lang, C):
   %(langbar)s
 </div>
 <header class="hero">
-  <img class="bg" src="/img/hero-street.jpg" alt="Ciudad de México">
+  <img class="bg" src="/img/hero-street.jpg" alt="%(hero_alt)s" width="853" height="1280" fetchpriority="high" decoding="async">
   <div class="inner">
     <span class="kicker">%(kicker)s</span>
     <h1>%(h1)s</h1>
@@ -400,6 +418,7 @@ def render(lang, C):
 </html>
 """ % dict(
         htmllang=C["htmllang"], title=C["title"], desc=C["desc"], alts=alts, css=CSS,
+        hero_alt=C.get("hero_alt", "Authentic Mexico City street photography by Rodo — local CDMX photographer and guide"),
         nav=nav, langbar=langbar(lang), kicker=C["kicker"], h1=C["h1"], sub=C["sub"],
         cta1=C["cta1"], cta2=C["cta2"], man_eyebrow=C["man_eyebrow"], man_h2=C["man_h2"], man_p=C["man_p"],
         port_eyebrow=C["port_eyebrow"], port_h2=C["port_h2"], port_tag=C["port_tag"], gallery=gallery,
@@ -419,6 +438,19 @@ def render(lang, C):
 GAL = lambda caps: list(zip(
     ["portrait-red.jpg","angel-bw.jpg","skyline-sunset.jpg","doorway.jpg","vocho.jpg","mural-wings.jpg",
      "intersection.jpg","revolucion.jpg","oxxo.jpg","red-car.jpg","mural-dragon.jpg","moto.jpg"], caps))
+
+# dimensiones reales (px) — reservan espacio y matan CLS (Core Web Vitals)
+DIMS = {
+    "portrait-red.jpg":(1280,853),"angel-bw.jpg":(853,1280),"skyline-sunset.jpg":(960,1280),
+    "doorway.jpg":(853,1280),"vocho.jpg":(720,1280),"mural-wings.jpg":(720,1280),
+    "intersection.jpg":(1280,720),"revolucion.jpg":(960,1280),"oxxo.jpg":(1280,853),
+    "red-car.jpg":(853,1280),"mural-dragon.jpg":(1280,720),"moto.jpg":(1280,853),
+    "cielo-abierto.jpg":(720,1280),"reforma-dusk.jpg":(853,1280),"torre-night.jpg":(960,1280),
+    "revolucion.jpg":(960,1280),"hero-street.jpg":(853,1280),"portrait-red.jpg":(1280,853),
+}
+def wh(img):
+    d = DIMS.get(img)
+    return (' width="%d" height="%d"' % d) if d else ""
 
 LANGS = {}
 
@@ -715,12 +747,24 @@ if __name__ == "__main__":
             f.write(html)
         print("wrote", lang, "->", os.path.join(path, "index.html"), len(html), "bytes")
 
-    # sitemap.xml (URLs simples; hreflang vive en <head>, no se duplica aquí)
-    urls = "".join(
-        '  <url><loc>%s%s</loc><changefreq>monthly</changefreq><priority>%s</priority></url>\n'
-        % (SITE, LANG_PATH[l], "1.0" if l == "zh" else "0.8") for l in LANG_ORDER)
+    # sitemap.xml (hreflang vive en <head>, no se duplica; imágenes → Google Images)
+    import datetime
+    today = datetime.date.today().isoformat()
+    from xml.sax.saxutils import escape as _esc
+    # bloque de imágenes (galería + hero) colgado del home — image SEO para fotógrafo
+    img_block = "".join(
+        '    <image:image><image:loc>%s/img/%s</image:loc><image:title>%s</image:title></image:image>\n'
+        % (SITE, img, _esc(strip_tags(cap))) for img, cap in LANGS["en"]["gallery"])
+    img_block = ('    <image:image><image:loc>%s/img/hero-street.jpg</image:loc>'
+                 '<image:title>Authentic Mexico City street photography</image:title></image:image>\n' % SITE) + img_block
+    urls = ""
+    for l in LANG_ORDER:
+        extra = img_block if l == "zh" else ""
+        urls += ('  <url><loc>%s%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>%s</priority>\n%s  </url>\n'
+                 % (SITE, LANG_PATH[l], today, "1.0" if l == "zh" else "0.8", extra))
     sitemap = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+               'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n%s</urlset>\n' % urls)
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(sitemap)
     # robots.txt — permite explícitamente crawlers de IA (GEO)

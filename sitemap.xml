@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://authentic-cdmx.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://authentic-cdmx.com/ja/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://authentic-cdmx.com/en/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://authentic-cdmx.com/fr/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://authentic-cdmx.com/intl/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://authentic-cdmx.com/</loc><lastmod>2026-07-16</lastmod><changefreq>monthly</changefreq><priority>1.0</priority>
+    <image:image><image:loc>https://authentic-cdmx.com/img/hero-street.jpg</image:loc><image:title>Authentic Mexico City street photography</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/portrait-red.jpg</image:loc><image:title>Portrait · street</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/angel-bw.jpg</image:loc><image:title>Ángel de la Independencia</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/skyline-sunset.jpg</image:loc><image:title>Reforma · sunset</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/doorway.jpg</image:loc><image:title>Colonial doorway</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/vocho.jpg</image:loc><image:title>Vocho · VW Beetle</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/mural-wings.jpg</image:loc><image:title>Mural · wings</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/intersection.jpg</image:loc><image:title>Night · intersection</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/revolucion.jpg</image:loc><image:title>Monumento a la Revolución</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/oxxo.jpg</image:loc><image:title>Corner store life</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/red-car.jpg</image:loc><image:title>Neón · neon</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/mural-dragon.jpg</image:loc><image:title>Mural · dragon</image:title></image:image>
+    <image:image><image:loc>https://authentic-cdmx.com/img/moto.jpg</image:loc><image:title>Movimiento · motion</image:title></image:image>
+  </url>
+  <url><loc>https://authentic-cdmx.com/ja/</loc><lastmod>2026-07-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url><loc>https://authentic-cdmx.com/en/</loc><lastmod>2026-07-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url><loc>https://authentic-cdmx.com/fr/</loc><lastmod>2026-07-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url><loc>https://authentic-cdmx.com/intl/</loc><lastmod>2026-07-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
 </urlset>
